@@ -13,12 +13,12 @@
         {
             "displayName": "Command System Sample",
             "description": "Contains a sample of how to use the command system",
-            "path": "Samples/SamplesCommands"
+            "path": "Samples~/SamplesCommands"
         },
         {
             "displayName": "StateMachine Sample",
             "description": "Contains a sample of how to use the state machine",
-            "path": "Samples/SamplesStateMachine"
+            "path": "Samples~/SamplesStateMachine"
         }
     ]
 }
