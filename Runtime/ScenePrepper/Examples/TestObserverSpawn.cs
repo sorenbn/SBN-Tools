@@ -22,28 +22,6 @@ namespace SBN.SceneHelper.Examples
             sceneLoader?.Unsubscribe(this);
         }
 
-        public void OnSceneDispose(Scene scene)
-        {
-            Debug.Log($"Scene dispose spawner");
-        }
-
-        public IEnumerator OnSceneDisposeAsync(Scene scene)
-        {
-            Debug.Log($"Scene dispose spawner async");
-            yield return null;
-        }
-
-        public void OnSceneReady(Scene scene)
-        {
-            Debug.Log($"Scene ready spawner");
-        }
-
-        public IEnumerator OnSceneReadyAsync(Scene scene)
-        {
-            Debug.Log($"Scene ready spawner async");
-            yield return null;
-        }
-
         public void OnSceneInitialize(Scene scene)
         {
             Debug.Log($"Scene initialize spawner");
@@ -53,6 +31,16 @@ namespace SBN.SceneHelper.Examples
         {
             Debug.Log($"Scene initialize spawner async");
             yield return null;
+        }
+
+        public void OnSceneDispose(Scene scene)
+        {
+            Debug.Log($"Scene dispose spawner");
+        }
+
+        public void OnSceneReady(Scene scene)
+        {
+            Debug.Log($"Scene ready spawner");
         }
     }
 }

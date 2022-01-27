@@ -5,11 +5,15 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 namespace SBN.SceneHelper.Core
 {
     public class ScenePrepper : MonoBehaviour, ISceneObservable
     {
+        public event Action<Scene> OnSceneIntialize;
+        public event Action<Scene> OnSceneReady;
+
         [SerializeField]
         [Tooltip("This determines if the Scene Loader should look for event listeners only in child objects or the whole scene hierarchy")]
         private bool onlyEvaluateChildren;
@@ -19,6 +23,7 @@ namespace SBN.SceneHelper.Core
 
         private List<ISceneObserver> sceneObservers;
         private List<ISceneObserverAsync> sceneObserversAsync;
+        private Coroutine initializeRoutine;
 
         private void Awake()
         {
@@ -31,13 +36,11 @@ namespace SBN.SceneHelper.Core
         private void OnEnable()
         {
             SceneManager.sceneLoaded += SceneManager_sceneLoaded;
-            SceneManager.sceneUnloaded += SceneManager_sceneUnloaded;
         }
 
         private void OnDisable()
         {
             SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
-            SceneManager.sceneUnloaded -= SceneManager_sceneUnloaded;
         }
 
         private void GetObserversInChildren()
@@ -54,16 +57,19 @@ namespace SBN.SceneHelper.Core
 
         private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode loadMode)
         {
-            StartCoroutine(InitializeScene(scene));
-        }
+            if (initializeRoutine != null)
+            {
+                Debug.LogWarning($"WARNING: Scene is already being initialized");
+                return;
+            }
 
-        private void SceneManager_sceneUnloaded(Scene scene)
-        {
-            StartCoroutine(DisposeScene(scene));
+            initializeRoutine = StartCoroutine(InitializeScene(scene));
         }
 
         private IEnumerator InitializeScene(Scene scene)
         {
+            OnSceneIntialize?.Invoke(scene);
+
             for (int i = 0; i < sceneObservers.Count; i++)
                 sceneObservers[i].OnSceneInitialize(scene);
 
@@ -73,17 +79,7 @@ namespace SBN.SceneHelper.Core
             for (int i = 0; i < sceneObservers.Count; i++)
                 sceneObservers[i].OnSceneReady(scene);
 
-            for (int i = 0; i < sceneObserversAsync.Count; i++)
-                yield return sceneObserversAsync[i].OnSceneReadyAsync(scene);
-        }
-
-        private IEnumerator DisposeScene(Scene scene)
-        {
-            for (int i = 0; i < sceneObservers.Count; i++)
-                sceneObservers[i].OnSceneDispose(scene);
-
-            for (int i = 0; i < sceneObserversAsync.Count; i++)
-                yield return sceneObserversAsync[i].OnSceneDisposeAsync(scene);
+            OnSceneReady?.Invoke(scene);
         }
 
         public void Subscribe<T>(T observer) where T : ISceneObserver

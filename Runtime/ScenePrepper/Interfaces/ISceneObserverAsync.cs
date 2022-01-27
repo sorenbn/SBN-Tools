@@ -18,17 +18,5 @@ namespace SBN.SceneHelper.Interfaces
         /// </summary>
         /// <param name="scene"></param>
         IEnumerator OnSceneInitializeAsync(Scene scene);
-
-        /// <summary>
-        /// Gets called when a scene is unloaded
-        /// </summary>
-        /// <param name="scene"></param>
-        IEnumerator OnSceneDisposeAsync(Scene scene);
-
-        /// <summary>
-        /// Gets called when a scene has finished all the initialization of all scene observers
-        /// </summary>
-        /// <param name="scene"></param>
-        IEnumerator OnSceneReadyAsync(Scene scene);
     }
 }

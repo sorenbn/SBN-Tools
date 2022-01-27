@@ -19,12 +19,6 @@ namespace SBN.SceneHelper.Interfaces
         void OnSceneInitialize(Scene scene);
 
         /// <summary>
-        /// Gets called when a scene is unloaded
-        /// </summary>
-        /// <param name="scene"></param>
-        void OnSceneDispose(Scene scene);
-
-        /// <summary>
         /// Gets called when a scene has finished all the initialization of all scene observers
         /// </summary>
         /// <param name="scene"></param>
