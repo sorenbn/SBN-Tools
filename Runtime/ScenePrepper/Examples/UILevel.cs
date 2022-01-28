@@ -1,6 +1,5 @@
 using SBN.SceneHelper.Interfaces;
 using SBN.Utilities.ExtensionMethods;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,10 +9,10 @@ namespace SBN.SceneHelper.Examples
     public class UILevel : MonoBehaviour
     {
         [SerializeField]
-        private TextMeshProUGUI sceneNameField;
+        private Text sceneNameField;
 
         [SerializeField]
-        private TextMeshProUGUI sceneStatusField;
+        private Text sceneStatusField;
 
         [SerializeField]
         private Button changeLevelButton;
@@ -59,13 +58,13 @@ namespace SBN.SceneHelper.Examples
         private void SceneObservable_OnSceneIntialize(Scene obj)
         {
             sceneStatusField.color = Color.yellow;
-            sceneStatusField.text = "Status: loading...";
+            sceneStatusField.text = "Status: loading scene...";
         }
 
         private void SceneObservable_OnSceneReady(Scene obj)
         {
             sceneStatusField.color = Color.green;
-            sceneStatusField.text = "Status: ready!";
+            sceneStatusField.text = "Status: scene ready!";
 
             changeLevelButton.interactable = true;
         }
