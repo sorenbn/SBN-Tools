@@ -9,6 +9,15 @@ using System;
 
 namespace SBN.SceneHelper.Core
 {
+    /// <summary>
+    /// A system to help prepare scenes with heavy loading
+    /// or just a better flow of control when changing scenes 
+    /// and which objects are loaded and prepared in which order.
+    /// Use the standard SceneManager.LoadScene(). 
+    /// NOTE: This system is only built to work with LoadSceneMode.Single
+    /// 
+    /// Only one of these must exist in each scene.
+    /// </summary>
     public class ScenePrepper : MonoBehaviour, ISceneObservable
     {
         public event Action<Scene> OnSceneIntialize;

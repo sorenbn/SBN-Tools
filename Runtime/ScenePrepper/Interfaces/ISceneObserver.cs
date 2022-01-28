@@ -2,6 +2,9 @@ using UnityEngine.SceneManagement;
 
 namespace SBN.SceneHelper.Interfaces
 {
+    /// <summary>
+    /// Interface to be invoked by the ISceneObservable.
+    /// </summary>
     public interface ISceneObserver
     {
         /// <summary>
@@ -13,13 +16,13 @@ namespace SBN.SceneHelper.Interfaces
         }
 
         /// <summary>
-        /// Gets called when a scene is loaded and initialization has begun
+        /// Gets called when a scene is loaded and initialization has begun.
         /// </summary>
         /// <param name="scene"></param>
         void OnSceneInitialize(Scene scene);
 
         /// <summary>
-        /// Gets called when a scene has finished all the initialization of all scene observers
+        /// Gets called when a scene has finished all the initialization of all scene observers.
         /// </summary>
         /// <param name="scene"></param>
         void OnSceneReady(Scene scene);
