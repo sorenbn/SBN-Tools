@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SBN.Utilities.Mathematics
+namespace SBN.Utilities.Math
 {
-    public static class Mathfs
+    public static class MathUtility
     {
         /// <summary>
         /// Determines if the given point is inside the range of the target.

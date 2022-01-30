@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace SBN.Utilities.Physics
 {
-    public static class PhysicsUtilities
+    public static class PhysicsUtility
     {
         public static bool Contains(this LayerMask mask, int layer)
         {
