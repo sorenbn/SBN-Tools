@@ -1,7 +1,9 @@
 {
     "name": "com.sbn.tools.editor",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:a920cf9df1d6b5f42aafb7efb2e7cefe"
+    ],
     "includePlatforms": [
         "Editor"
     ],

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SBN.EditorUtils
+namespace SBN.Utilities.Attributes
 {
     public class ReadOnlyAttribute : PropertyAttribute
     {
