@@ -11,10 +11,16 @@ namespace SBN.UITool.Core
         }
 
         protected CanvasGroup canvasGroup;
+        protected UIWindowManager uiManager;
 
         private void Awake()
         {
             canvasGroup = GetComponent<CanvasGroup>();
+        }
+
+        public virtual void Setup(UIWindowManager uiManager)
+        {
+            this.uiManager = uiManager;
         }
 
         public virtual void Show()

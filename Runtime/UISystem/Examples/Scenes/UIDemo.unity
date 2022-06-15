@@ -237,9 +237,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e8904ecdf0f63b43ba71103029a8332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialScreen: {fileID: 11400000, guid: 444c2d3cd7383ec42ba746ed364dd60b, type: 2}
-  preloadScreens:
-  - {fileID: 11400000, guid: 444c2d3cd7383ec42ba746ed364dd60b, type: 2}
+  windowContainer: {fileID: 11400000, guid: 41e7318d6529b834c9fa64dc6d85dabf, type: 2}
+  initialWindow: {fileID: 0}
+  preloadWindows: []
 --- !u!1 &1441340158
 GameObject:
   m_ObjectHideFlags: 0

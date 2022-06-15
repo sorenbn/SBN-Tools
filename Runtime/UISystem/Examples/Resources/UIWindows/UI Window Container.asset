@@ -9,7 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 704740f1adaf76646b8a4cadf7f0fe52, type: 3}
-  m_Name: Screen_MainMenu
+  m_Script: {fileID: 11500000, guid: 79d0194301737d74683f5b41cdc4e867, type: 3}
+  m_Name: UI Window Container
   m_EditorClassIdentifier: 
-  element: {fileID: 751406991487128068, guid: 1914bfe631a9425429418257afdcb2c0, type: 3}
+  windows:
+  - {fileID: 751406991487128068, guid: 1914bfe631a9425429418257afdcb2c0, type: 3}
+  - {fileID: 751406991487128068, guid: ec7fe5617b844b34b9e9cbe53999628e, type: 3}
