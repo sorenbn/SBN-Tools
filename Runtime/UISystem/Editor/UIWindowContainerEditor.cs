@@ -25,17 +25,17 @@ namespace SBN.UITool.EditorTool
             EditorGUILayout.LabelField("Step 2");
 
             if (GUILayout.Button("Assign Ids"))
-                AssignIds(scriptTarget);
+                AssignIds();
         }
 
         public void GenerateUIWindowIds(UIWindowContainer scriptTarget)
         {
-            var assets = AssetDatabase.FindAssets("UIWindowId");
+            var assets = AssetDatabase.FindAssets(enumName);
             var scriptAsset = assets.FirstOrDefault();
 
             if (scriptAsset == null)
             {
-                Debug.LogError($"ERROR: UIWindowId.cs is missing! How is your project even compiling?");
+                Debug.LogError($"ERROR: {enumName}.cs is missing! How is your project even compiling?");
                 return;
             }
 
@@ -44,7 +44,7 @@ namespace SBN.UITool.EditorTool
 
             using (StreamWriter outfile = new StreamWriter(path))
             {
-                outfile.WriteLine("//THIS ENUM IS AUTO-GENERATED! DO NOT EDIT!");
+                outfile.WriteLine("//THIS ENUM IS AUTO-GENERATED! DO NOT EDIT OR DELETE!");
                 outfile.WriteLine($"public enum {enumName}");
                 outfile.WriteLine("{ ");
                 outfile.WriteLine("None = 0,");
@@ -60,16 +60,22 @@ namespace SBN.UITool.EditorTool
             AssetDatabase.Refresh();
         }
 
-        public void AssignIds(UIWindowContainer scriptTarget)
+        public void AssignIds()
         {
-            var windows = scriptTarget.GetAllWindows();
+            var arrayProp = serializedObject.FindProperty("windows");
 
-            for (int i = 0; i < windows.Length; i++)
+            for (int i = 0; i < arrayProp.arraySize; i++)
             {
-                Undo.RecordObject(windows[i].gameObject, "Save Window Id");
-                windows[i].Id = (UIWindowId)(i + 1);
-                PrefabUtility.RecordPrefabInstancePropertyModifications(windows[i].gameObject);
+                var uiWindowProp = arrayProp.GetArrayElementAtIndex(i);
+
+                var enumSerializedObject = new SerializedObject(uiWindowProp.objectReferenceValue);
+                var enumIdProperty = enumSerializedObject.FindProperty("id");
+
+                enumIdProperty.enumValueFlag = i + 1;
+                enumSerializedObject.ApplyModifiedProperties();
             }
+
+            serializedObject.ApplyModifiedProperties();
         }
     } 
 }

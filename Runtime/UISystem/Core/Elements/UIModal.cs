@@ -1,6 +1,4 @@
-using SBN.UITool.Core;
-
-namespace SBN.UITool
+namespace SBN.UITool.Core.Elements
 {
     public class UIModal : UIElement
     {

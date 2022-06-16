@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SBN.UITool.Core
+namespace SBN.UITool.Core.Elements
 {
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class UIElement : MonoBehaviour

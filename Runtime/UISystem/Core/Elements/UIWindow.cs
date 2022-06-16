@@ -1,12 +1,11 @@
-using SBN.UITool.Core;
 using SBN.Utilities.Attributes;
 using UnityEngine;
 
-namespace SBN.UITool
+namespace SBN.UITool.Core.Elements
 {
     public class UIWindow : UIElement
     {
-        [SerializeField] private UIWindowId id;
+        [SerializeField, ReadOnly] private UIWindowId id;
 
         public UIWindowId Id
         {
