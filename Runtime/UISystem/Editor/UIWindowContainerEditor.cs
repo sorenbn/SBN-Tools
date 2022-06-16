@@ -65,7 +65,11 @@ namespace SBN.UITool.EditorTool
             var windows = scriptTarget.GetAllWindows();
 
             for (int i = 0; i < windows.Length; i++)
+            {
+                Undo.RecordObject(windows[i].gameObject, "Save Window Id");
                 windows[i].Id = (UIWindowId)(i + 1);
+                PrefabUtility.RecordPrefabInstancePropertyModifications(windows[i].gameObject);
+            }
         }
     } 
 }

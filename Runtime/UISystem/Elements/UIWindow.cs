@@ -6,7 +6,7 @@ namespace SBN.UITool
 {
     public class UIWindow : UIElement
     {
-        [SerializeField, ReadOnly] private UIWindowId id;
+        [SerializeField] private UIWindowId id;
 
         public UIWindowId Id
         {
