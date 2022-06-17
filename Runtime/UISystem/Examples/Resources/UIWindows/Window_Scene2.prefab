@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 751406991487128186}
   - component: {fileID: 751406991487128071}
   m_Layer: 5
-  m_Name: Window_Options
+  m_Name: Window_Scene2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,7 +54,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f797a7837ac044f4bb594a236a149254, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 2
+  id: 3
   settings:
     DontDetroyOnLoad: 0
 --- !u!222 &751406991487128069
@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 0.81491137, b: 0.5518868, a: 0.392}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -141,11 +141,11 @@ RectTransform:
   m_Father: {fileID: 751406991487128187}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 20}
   m_SizeDelta: {x: 650, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &905385203011706988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,7 +252,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Options
+  m_text: Scene 2
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -330,11 +330,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6927296445013374279}
-  - component: {fileID: 1078680462813023880}
   - component: {fileID: 4125143666466880808}
+  - component: {fileID: 8926252091829710805}
   - component: {fileID: 8248808116591904578}
   - component: {fileID: 7750223522759847903}
-  - component: {fileID: 5649710353262155170}
   m_Layer: 5
   m_Name: Button_Back
   m_TagString: Untagged
@@ -363,19 +362,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 320, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1078680462813023880
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8141213851403381498}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e291edbe1495bf479e1f77da23055ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetWindow: 1
 --- !u!222 &4125143666466880808
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -384,6 +370,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8141213851403381498}
   m_CullTransparentMesh: 1
+--- !u!114 &8926252091829710805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8141213851403381498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f6baee1f206b8c438ec59fdf65df0a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneName: UIDemo_Scene1
 --- !u!114 &8248808116591904578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,9 +457,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1078680462813023880}
-        m_TargetAssemblyTypeName: UIButtonWindowChanger, com.sbn.tools
-        m_MethodName: ShowWindow
+      - m_Target: {fileID: 8926252091829710805}
+        m_TargetAssemblyTypeName: UIButtonSceneLoader, com.sbn.tools
+        m_MethodName: LoadScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -470,18 +469,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!225 &5649710353262155170
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8141213851403381498}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!1 &8973135804084439165
 GameObject:
   m_ObjectHideFlags: 0

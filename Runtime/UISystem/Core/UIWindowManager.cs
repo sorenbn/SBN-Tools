@@ -1,6 +1,8 @@
 using SBN.UITool.Core.Elements;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SBN.UITool.Core
 {
@@ -30,6 +32,8 @@ namespace SBN.UITool.Core
 
                 allWindows.Add(screen.Id, element);
             }
+
+            DontDestroyOnLoad(gameObject);
         }
 
         private void Start()
@@ -38,6 +42,17 @@ namespace SBN.UITool.Core
                 ShowWindow(initialWindow.Id);
         }
 
+        private void OnEnable()
+        {
+            SceneManager.sceneUnloaded += SceneManager_sceneUnloaded;
+        }
+
+        private void OnDisable()
+        {
+            SceneManager.sceneUnloaded -= SceneManager_sceneUnloaded;
+        }
+
+        // TEST METHOD, DELETE ME LATER
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -56,7 +71,7 @@ namespace SBN.UITool.Core
 
         public void ShowWindow(UIWindowId windowId)
         {
-            if (currentWindow?.Id == windowId)
+            if (currentWindow != null && currentWindow?.Id == windowId)
                 return;
 
             currentWindow?.Hide();
@@ -70,9 +85,10 @@ namespace SBN.UITool.Core
             if (!allWindows.TryGetValue(windowId, out var target))
             {
                 var nextWindow = Instantiate(windowContainer.GetWindowById(windowId), transform);
-                allWindows.Add(windowId, nextWindow);
+                nextWindow.Setup(this);
 
                 target = nextWindow;
+                allWindows.Add(windowId, nextWindow);
             }
 
             currentWindow = target;
@@ -86,9 +102,10 @@ namespace SBN.UITool.Core
             if (!allWindows.TryGetValue(windowId, out var target))
             {
                 var nextWindow = Instantiate(windowContainer.GetWindowById(windowId), transform);
-                allWindows.Add(windowId, nextWindow);
+                nextWindow.Setup(this);
 
                 target = nextWindow;
+                allWindows.Add(windowId, nextWindow);
             }
 
             target.Hide();
@@ -96,7 +113,9 @@ namespace SBN.UITool.Core
 
         public void HideAllWindows()
         {
+            currentWindow?.HideInstant();
             currentWindow = null;
+
             ClearHistory();
         }
 
@@ -112,6 +131,21 @@ namespace SBN.UITool.Core
         public void ClearHistory()
         {
             windowHistory.Clear();
+        }
+
+        private void SceneManager_sceneUnloaded(Scene arg0)
+        {
+            var unloadWindows = allWindows
+                .Where(x => !x.Value.GetSettings().DontDetroyOnLoad)
+                .ToList();
+
+            foreach (var window in unloadWindows)
+            {
+                allWindows.Remove(window.Key);
+                Destroy(window.Value.gameObject);
+            }
+
+            HideAllWindows();
         }
     }
 }

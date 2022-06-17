@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: UI Window Container
   m_EditorClassIdentifier: 
   windows:
-  - {fileID: 751406991487128068, guid: 1914bfe631a9425429418257afdcb2c0, type: 3}
+  - {fileID: -8219850348912919151, guid: 1914bfe631a9425429418257afdcb2c0, type: 3}
   - {fileID: 751406991487128068, guid: ec7fe5617b844b34b9e9cbe53999628e, type: 3}
+  - {fileID: 751406991487128068, guid: 81f87d88504ac9747b28e26b4f8bf05e, type: 3}
