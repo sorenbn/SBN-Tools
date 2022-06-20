@@ -1,3 +1,4 @@
+using SBN.UITool.Core.Managers;
 using SBN.Utilities.Attributes;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ namespace SBN.UITool.Core.Elements
 #endif
         }
 
-        public override void Setup(UIWindowManager uiManager)
+        public override void Setup(UIManager uiManager)
         {
             base.Setup(uiManager);
 

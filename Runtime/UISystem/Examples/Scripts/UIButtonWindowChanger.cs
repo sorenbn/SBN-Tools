@@ -7,6 +7,6 @@ public class UIButtonWindowChanger : UIElement
 
     public void ShowWindow()
     {
-        uiManager.ShowWindow(targetWindow);
+        UIManager.ShowWindow(targetWindow);
     }
 }

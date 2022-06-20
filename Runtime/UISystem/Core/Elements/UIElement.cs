@@ -1,3 +1,5 @@
+using SBN.UITool.Core.Managers;
+using System;
 using UnityEngine;
 
 namespace SBN.UITool.Core.Elements
@@ -5,22 +7,24 @@ namespace SBN.UITool.Core.Elements
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class UIElement : MonoBehaviour
     {
+        public event Action<bool> OnActiveStatusChanged;
+
         public bool Active
         {
             get; private set;
         }
 
-        protected CanvasGroup canvasGroup;
-        protected UIWindowManager uiManager;
+        protected CanvasGroup CanvasGroup;
+        protected UIManager UIManager;
 
         private void Awake()
         {
-            canvasGroup = GetComponent<CanvasGroup>();
+            CanvasGroup = GetComponent<CanvasGroup>();
         }
 
-        public virtual void Setup(UIWindowManager uiManager)
+        public virtual void Setup(UIManager uiManager)
         {
-            this.uiManager = uiManager;
+            UIManager = uiManager;
         }
 
         public virtual void Show()
@@ -29,6 +33,8 @@ namespace SBN.UITool.Core.Elements
 
             gameObject.SetActive(true);
             Active = true;
+
+            OnActiveStatusChanged?.Invoke(Active);
         }
 
         public virtual void Hide()
@@ -37,18 +43,29 @@ namespace SBN.UITool.Core.Elements
 
             Active = false;
             gameObject.SetActive(false);
+
+            OnActiveStatusChanged?.Invoke(Active);
         }
 
         public virtual void ShowInstant()
         {
             gameObject.SetActive(true);
             Active = true;
+
+            OnActiveStatusChanged?.Invoke(Active);
         }
 
         public virtual void HideInstant()
         {
             Active = false;
             gameObject.SetActive(false);
+
+            OnActiveStatusChanged?.Invoke(Active);
+        }
+
+        public virtual void SetInteractable(bool value)
+        {
+            CanvasGroup.interactable = value;
         }
     }
 }

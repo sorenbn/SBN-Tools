@@ -4,9 +4,9 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace SBN.UITool.Core
+namespace SBN.UITool.Core.Managers
 {
-    public class UIWindowManager : MonoBehaviour
+    public class UIManager : MonoBehaviour
     {
         [Header("Components")]
         [SerializeField] private UIWindowContainer windowContainer;
@@ -14,13 +14,24 @@ namespace SBN.UITool.Core
         [Header("Settings")]
         [SerializeField] private UIWindow initialWindow;
         [SerializeField] private List<UIWindow> preloadWindows;
-
-        private UIWindow currentWindow;
         private Stack<UIWindow> windowHistory = new Stack<UIWindow>();
 
         private Dictionary<UIWindowId, UIWindow> allWindows = new Dictionary<UIWindowId, UIWindow>();
 
+        public UIModalManager ModalManager { get;
+            private set; }
+        public UIWindow CurrentWindow { get;
+            private set; }
+
         private void Awake()
+        {
+            ModalManager = GetComponent<UIModalManager>();
+
+            SetupPreloadedWindows();
+            DontDestroyOnLoad(gameObject);
+        }
+
+        private void SetupPreloadedWindows()
         {
             for (int i = 0; i < preloadWindows.Count; i++)
             {
@@ -32,8 +43,6 @@ namespace SBN.UITool.Core
 
                 allWindows.Add(screen.Id, element);
             }
-
-            DontDestroyOnLoad(gameObject);
         }
 
         private void Start()
@@ -52,29 +61,12 @@ namespace SBN.UITool.Core
             SceneManager.sceneUnloaded -= SceneManager_sceneUnloaded;
         }
 
-        // TEST METHOD, DELETE ME LATER
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                ShowWindow(UIWindowId.WindowMainMenu);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                ShowWindow(UIWindowId.WindowOptions);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                ShowWindow(UIWindowId.None);
-            }
-        }
-
         public void ShowWindow(UIWindowId windowId)
         {
-            if (currentWindow != null && currentWindow?.Id == windowId)
+            if (CurrentWindow != null && CurrentWindow?.Id == windowId)
                 return;
 
-            currentWindow?.Hide();
+            CurrentWindow?.Hide();
 
             if (windowId == UIWindowId.None)
             {
@@ -91,10 +83,10 @@ namespace SBN.UITool.Core
                 allWindows.Add(windowId, nextWindow);
             }
 
-            currentWindow = target;
-            currentWindow.Show();
+            CurrentWindow = target;
+            CurrentWindow.Show();
 
-            windowHistory.Push(currentWindow);
+            windowHistory.Push(CurrentWindow);
         }
 
         public void HideWindow(UIWindowId windowId)
@@ -113,8 +105,8 @@ namespace SBN.UITool.Core
 
         public void HideAllWindows()
         {
-            currentWindow?.HideInstant();
-            currentWindow = null;
+            CurrentWindow?.HideInstant();
+            CurrentWindow = null;
 
             ClearHistory();
         }
@@ -133,11 +125,11 @@ namespace SBN.UITool.Core
             windowHistory.Clear();
         }
 
-        private void SceneManager_sceneUnloaded(Scene arg0)
+        private void UnloadWindows()
         {
             var unloadWindows = allWindows
-                .Where(x => !x.Value.GetSettings().DontDetroyOnLoad)
-                .ToList();
+            .Where(x => !x.Value.GetSettings().DontDetroyOnLoad)
+            .ToList();
 
             foreach (var window in unloadWindows)
             {
@@ -146,6 +138,11 @@ namespace SBN.UITool.Core
             }
 
             HideAllWindows();
+        }
+
+        private void SceneManager_sceneUnloaded(Scene scene)
+        {
+            UnloadWindows();
         }
     }
 }

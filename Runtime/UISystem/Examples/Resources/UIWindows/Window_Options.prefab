@@ -56,7 +56,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   settings:
-    DontDetroyOnLoad: 0
+    DontDetroyOnLoad: 1
 --- !u!222 &751406991487128069
 CanvasRenderer:
   m_ObjectHideFlags: 0
