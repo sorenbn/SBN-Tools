@@ -1,7 +1,7 @@
-using SBN.SequencerTool.Core;
+using SBN.SequencerTool;
 using UnityEngine;
 
-public class SequenceActionLogger : SequenceAction
+public class SequenceActionLogger : SequenceActionMono
 {
     [SerializeField] private string message;
 

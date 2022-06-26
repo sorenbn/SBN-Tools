@@ -1,9 +1,9 @@
-using SBN.SequencerTool.Core;
+using SBN.SequencerTool;
 using System;
 using System.Collections;
 using UnityEngine;
 
-public class SequenceActionWaiter : SequenceAction
+public class SequenceActionWaiter : SequenceActionMono
 {
     [SerializeField] private float waitTime = 1.0f;
 
@@ -19,6 +19,7 @@ public class SequenceActionWaiter : SequenceAction
 
     protected override void OnEndAction()
     {
+        Debug.Log($"Timer of {waitTime} second(s) complete!");
     }
 
     protected override void OnSkipAction()

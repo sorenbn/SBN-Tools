@@ -1,12 +1,13 @@
+using SBN.SequencerTool.Interfaces;
 using System;
 using UnityEngine;
 
-namespace SBN.SequencerTool.Core
+namespace SBN.SequencerTool
 {
-    public abstract class SequenceAction : MonoBehaviour
+    public abstract class SequenceActionMono : MonoBehaviour, ISequenceAction
     {
-        public event Action<SequenceAction> OnActionBegin;
-        public event Action<SequenceAction> OnActionEnd;
+        public event Action<ISequenceAction> OnActionBegin;
+        public event Action<ISequenceAction> OnActionEnd;
 
         public bool Active
         {
