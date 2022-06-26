@@ -8,6 +8,8 @@ namespace SBN.SequencerTool.Sequencers
     {
         public event Action OnSequenceBegin;
         public event Action OnSequenceEnd;
+        public event Action OnSequenceReset;
+        public event Action OnSequenceSkip;
 
         private ISequenceAction[] actions;
         private ISequenceAction currentAction;
@@ -32,14 +34,26 @@ namespace SBN.SequencerTool.Sequencers
             throw new NotImplementedException();
         }
 
-        public void CancelSequence()
+        public void ResetSequence()
         {
-            throw new NotImplementedException();
+            if (actions == null || actions.Length == 0)
+                return;
+
+            if (currentAction != null)
+                currentAction.OnActionEnd -= CurrentAction_OnActionEnd;
+
+            for (int i = 0; i < actions.Length; i++)
+                actions[i].ResetAction();
+
+            currentAction = null;
+            currentActionIndex = 0;
+
+            OnSequenceReset?.Invoke();
         }
 
         public bool IsRunning()
         {
-            return actions.Any(x => x.Active);
+            return actions != null && actions.Any(x => x.Active);
         }
 
         private void ExecuteAction(ISequenceAction action)

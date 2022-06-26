@@ -33,7 +33,7 @@ public abstract class SequenceAction : ISequenceAction
         OnSkipAction();
     }
 
-    public void CancelAction()
+    public void ResetAction()
     {
         Active = false;
         OnCancelAction();

@@ -387,7 +387,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca433911861829a47acb7d0954c10a75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  message: This is the last action in the list
+  message: Another message being logged! noice
 --- !u!114 &1016528534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,7 +400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9237c6466c84954ab14ce3dfa8e6230, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waitTime: 3
+  waitTime: 2
 --- !u!114 &1016528535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,7 +416,7 @@ MonoBehaviour:
   target: {fileID: 1438639045}
   direction: {x: 1, y: 0, z: 0}
   moveSpeed: 1
-  moveDuration: 2
+  moveDuration: 3
 --- !u!1 &1438639044
 GameObject:
   m_ObjectHideFlags: 0

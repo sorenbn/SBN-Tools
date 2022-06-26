@@ -1,6 +1,6 @@
 ﻿using SBN.SequencerTool.Interfaces;
 using System;
-using UnityEngine;
+using System.Linq;
 
 namespace SBN.SequencerTool.Sequencers
 {
@@ -8,6 +8,8 @@ namespace SBN.SequencerTool.Sequencers
     {
         public event Action OnSequenceBegin;
         public event Action OnSequenceEnd;
+        public event Action OnSequenceReset;
+        public event Action OnSequenceSkip;
 
         private ISequenceAction[] actions;
 
@@ -30,6 +32,31 @@ namespace SBN.SequencerTool.Sequencers
             }
         }
 
+        public void SkipSequence()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ResetSequence()
+        {
+            if (actions == null || actions.Length == 0)
+                return;
+
+            for (int i = 0; i < actions.Length; i++)
+            {
+                actions[i].OnActionEnd -= SequencerParallel_OnActionEnd;
+                actions[i].ResetAction();
+            }
+
+            currentlyFinishedActions = 0;
+            OnSequenceReset?.Invoke();
+        }
+
+        public bool IsRunning()
+        {
+            return actions != null && actions.Any(x => x.Active);
+        }
+
         private void SequencerParallel_OnActionEnd(ISequenceAction action)
         {
             action.OnActionEnd -= SequencerParallel_OnActionEnd;
@@ -39,21 +66,6 @@ namespace SBN.SequencerTool.Sequencers
             {
                 OnSequenceEnd?.Invoke();
             }
-        }
-
-        public void SkipSequence()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void CancelSequence()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsRunning()
-        {
-            throw new NotImplementedException();
         }
     }
 }

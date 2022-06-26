@@ -10,9 +10,14 @@ public class SequenceActionMover : SequenceActionMono
     [SerializeField] private float moveSpeed = 5.0f;
     [SerializeField] private float moveDuration = 2.0f;
 
+    private Vector3 initialTargetPosition;
+
+    private Coroutine coroutine;
+
     protected override void OnBeginAction()
     {
-        StartCoroutine(c_Move());
+        initialTargetPosition = target.position;
+        coroutine = StartCoroutine(c_Move());
     }
 
     protected override void OnEndAction()
@@ -20,9 +25,12 @@ public class SequenceActionMover : SequenceActionMono
 
     }
 
-    protected override void OnCancelAction()
+    protected override void OnResetAction()
     {
-        throw new System.NotImplementedException();
+        if (coroutine != null)
+            StopCoroutine(coroutine);
+
+        target.position = initialTargetPosition;
     }
 
     protected override void OnSkipAction()

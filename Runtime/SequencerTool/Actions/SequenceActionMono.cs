@@ -36,32 +36,15 @@ namespace SBN.SequencerTool
             OnSkipAction();
         }
 
-        public void CancelAction()
+        public void ResetAction()
         {
             Active = false;
-            OnCancelAction();
+            OnResetAction();
         }
 
-        /// <summary>
-        /// Invoked whenever an action is beginning
-        /// </summary>
         protected abstract void OnBeginAction();
-
-        /// <summary>
-        /// Invoked whenever an action is ending
-        /// </summary>
         protected abstract void OnEndAction();
-
-        /// <summary>
-        /// Invoked whenever an action or sequence is skipped.
-        /// Should be used to set the "end state" of the action instantly.
-        /// </summary>
         protected abstract void OnSkipAction();
-
-        /// <summary>
-        /// Invoked whenever an action or sequence is cancelled.
-        /// Should be used to reset the action back to its original state.
-        /// </summary>
-        protected abstract void OnCancelAction();
+        protected abstract void OnResetAction();
     }
 }

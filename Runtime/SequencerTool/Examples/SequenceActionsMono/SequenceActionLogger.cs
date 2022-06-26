@@ -11,7 +11,7 @@ public class SequenceActionLogger : SequenceActionMono
         EndAction();
     }
 
-    protected override void OnCancelAction()
+    protected override void OnResetAction()
     {
 
     }

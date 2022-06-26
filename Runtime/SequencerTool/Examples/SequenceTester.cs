@@ -19,13 +19,19 @@ public class SequenceTester : MonoBehaviour
             sequencerParallel = new SequencerParallel();
 
         sequencer.OnSequenceEnd += Sequencer_OnSequenceEnd;
+        sequencer.OnSequenceReset += Sequencer_OnSequenceCancelled;
+
         sequencerParallel.OnSequenceEnd += SequencerParallel_OnSequenceEnd;
+        sequencerParallel.OnSequenceReset += SequencerParallel_OnSequenceReset;
     }
 
     private void OnDisable()
     {
         sequencer.OnSequenceEnd -= Sequencer_OnSequenceEnd;
+        sequencer.OnSequenceReset -= Sequencer_OnSequenceCancelled;
+
         sequencerParallel.OnSequenceEnd -= SequencerParallel_OnSequenceEnd;
+        sequencerParallel.OnSequenceReset -= SequencerParallel_OnSequenceReset;
     }
 
     private void Update()
@@ -38,6 +44,11 @@ public class SequenceTester : MonoBehaviour
         {
             sequencerParallel.StartSequence(actions);
         }
+        else if (Input.GetKeyDown(KeyCode.Q))
+        {
+            sequencer.ResetSequence();
+            sequencerParallel.ResetSequence();
+        }
     }
 
     private void Sequencer_OnSequenceEnd()
@@ -45,8 +56,18 @@ public class SequenceTester : MonoBehaviour
         Debug.Log($"Sequence end");
     }
 
+    private void Sequencer_OnSequenceCancelled()
+    {
+        Debug.Log($"Sequence cancelled");
+    }
+
     private void SequencerParallel_OnSequenceEnd()
     {
         Debug.Log($"Sequence parallel end");
+    }
+
+    private void SequencerParallel_OnSequenceReset()
+    {
+        Debug.Log($"Sequence parallel reset");
     }
 }

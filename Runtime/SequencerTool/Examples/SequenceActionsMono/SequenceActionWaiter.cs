@@ -7,14 +7,19 @@ public class SequenceActionWaiter : SequenceActionMono
 {
     [SerializeField] private float waitTime = 1.0f;
 
+    private Coroutine coroutine;
+
     protected override void OnBeginAction()
     {
         Debug.Log($"Waiting {waitTime} second(s)..");
-        StartCoroutine(c_Wait(waitTime, () => EndAction()));
+
+        coroutine = StartCoroutine(c_Wait(waitTime, () => EndAction()));
     }
 
-    protected override void OnCancelAction()
+    protected override void OnResetAction()
     {
+        if (coroutine != null)
+            StopCoroutine(coroutine);
     }
 
     protected override void OnEndAction()
