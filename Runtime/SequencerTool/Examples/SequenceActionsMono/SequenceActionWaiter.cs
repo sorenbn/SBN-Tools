@@ -29,6 +29,10 @@ public class SequenceActionWaiter : SequenceActionMono
 
     protected override void OnSkipAction()
     {
+        if (coroutine != null)
+            StopCoroutine(coroutine);
+
+        EndAction();
     }
 
     private IEnumerator c_Wait(float timeInSeconds, Action callback)

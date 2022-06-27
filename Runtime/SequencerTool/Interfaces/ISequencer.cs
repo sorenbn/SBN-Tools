@@ -7,7 +7,6 @@ namespace SBN.SequencerTool.Interfaces
         event Action OnSequenceBegin;
         event Action OnSequenceEnd;
         event Action OnSequenceReset;
-        event Action OnSequenceSkip;
 
         void StartSequence(ISequenceAction[] actions);
         void SkipSequence();

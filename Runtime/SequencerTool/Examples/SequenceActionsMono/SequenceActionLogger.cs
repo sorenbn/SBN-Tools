@@ -23,6 +23,6 @@ public class SequenceActionLogger : SequenceActionMono
 
     protected override void OnSkipAction()
     {
-
+        EndAction();
     }
 }

@@ -22,7 +22,7 @@ public class SequenceActionMover : SequenceActionMono
 
     protected override void OnEndAction()
     {
-
+        coroutine = null;
     }
 
     protected override void OnResetAction()
@@ -35,7 +35,13 @@ public class SequenceActionMover : SequenceActionMono
 
     protected override void OnSkipAction()
     {
-        throw new System.NotImplementedException();
+        if (coroutine != null)
+            StopCoroutine(coroutine);
+
+        var endPosition = initialTargetPosition + (direction * moveSpeed * moveDuration);
+        target.position = endPosition;
+
+        EndAction();
     }
 
     private IEnumerator c_Move()

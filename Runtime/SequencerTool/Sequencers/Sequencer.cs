@@ -9,7 +9,6 @@ namespace SBN.SequencerTool.Sequencers
         public event Action OnSequenceBegin;
         public event Action OnSequenceEnd;
         public event Action OnSequenceReset;
-        public event Action OnSequenceSkip;
 
         private ISequenceAction[] actions;
         private ISequenceAction currentAction;
@@ -31,7 +30,19 @@ namespace SBN.SequencerTool.Sequencers
 
         public void SkipSequence()
         {
-            throw new NotImplementedException();
+            if (actions == null || actions.Length == 0)
+                return;
+
+            if (currentAction != null)
+                currentAction.OnActionEnd -= CurrentAction_OnActionEnd;
+
+            for (int i = currentActionIndex; i < actions.Length; i++)
+                actions[i].SkipAction();
+
+            currentAction = null;
+            currentActionIndex = 0;
+
+            OnSequenceEnd?.Invoke();
         }
 
         public void ResetSequence()

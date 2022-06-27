@@ -19,7 +19,7 @@ public class SequenceTester : MonoBehaviour
             sequencerParallel = new SequencerParallel();
 
         sequencer.OnSequenceEnd += Sequencer_OnSequenceEnd;
-        sequencer.OnSequenceReset += Sequencer_OnSequenceCancelled;
+        sequencer.OnSequenceReset += Sequencer_OnSequenceReset;
 
         sequencerParallel.OnSequenceEnd += SequencerParallel_OnSequenceEnd;
         sequencerParallel.OnSequenceReset += SequencerParallel_OnSequenceReset;
@@ -28,7 +28,7 @@ public class SequenceTester : MonoBehaviour
     private void OnDisable()
     {
         sequencer.OnSequenceEnd -= Sequencer_OnSequenceEnd;
-        sequencer.OnSequenceReset -= Sequencer_OnSequenceCancelled;
+        sequencer.OnSequenceReset -= Sequencer_OnSequenceReset;
 
         sequencerParallel.OnSequenceEnd -= SequencerParallel_OnSequenceEnd;
         sequencerParallel.OnSequenceReset -= SequencerParallel_OnSequenceReset;
@@ -49,6 +49,11 @@ public class SequenceTester : MonoBehaviour
             sequencer.ResetSequence();
             sequencerParallel.ResetSequence();
         }
+        else if (Input.GetKeyDown(KeyCode.T))
+        {
+            sequencer.SkipSequence();
+            sequencerParallel.SkipSequence();
+        }
     }
 
     private void Sequencer_OnSequenceEnd()
@@ -56,14 +61,14 @@ public class SequenceTester : MonoBehaviour
         Debug.Log($"Sequence end");
     }
 
-    private void Sequencer_OnSequenceCancelled()
-    {
-        Debug.Log($"Sequence cancelled");
-    }
-
     private void SequencerParallel_OnSequenceEnd()
     {
         Debug.Log($"Sequence parallel end");
+    }
+
+    private void Sequencer_OnSequenceReset()
+    {
+        Debug.Log($"Sequence reset");
     }
 
     private void SequencerParallel_OnSequenceReset()
