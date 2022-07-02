@@ -1,9 +1,12 @@
 using SBN.SequencerTool.Interfaces;
 using System;
-using System.Linq;
 
 namespace SBN.SequencerTool.Sequencers
 {
+    /// <summary>
+    /// A standard sequencer.
+    /// Runs every sequence action sequentiallly in the order that they came in through the StartSequence() method.
+    /// </summary>
     public class Sequencer : ISequencer
     {
         public event Action OnSequenceBegin;
@@ -64,7 +67,16 @@ namespace SBN.SequencerTool.Sequencers
 
         public bool IsRunning()
         {
-            return actions != null && actions.Any(x => x.Active);
+            if (actions == null)
+                return false;
+
+            for (int i = 0; i < actions.Length; i++)
+            {
+                if (actions[i].Active)
+                    return true;
+            }
+
+            return false;
         }
 
         private void ExecuteAction(ISequenceAction action)

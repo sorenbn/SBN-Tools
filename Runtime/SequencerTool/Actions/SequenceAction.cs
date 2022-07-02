@@ -1,6 +1,11 @@
 using SBN.SequencerTool.Interfaces;
 using System;
 
+/// <summary>
+/// A base class which can be derived from to create your own sequence actions.
+/// Handles all the basics of invoking events and handling active state.
+/// You can pass all your custom data you need for the action via the constructor.
+/// </summary>
 public abstract class SequenceAction : ISequenceAction 
 {
     public event Action<ISequenceAction> OnActionBegin;
@@ -36,7 +41,7 @@ public abstract class SequenceAction : ISequenceAction
     public void ResetAction()
     {
         Active = false;
-        OnCancelAction();
+        OnResetAction();
     }
 
     /// <summary>
@@ -56,8 +61,8 @@ public abstract class SequenceAction : ISequenceAction
     protected abstract void OnSkipAction();
 
     /// <summary>
-    /// Invoked whenever an action or sequence is cancelled.
+    /// Invoked whenever an action or sequence is reet.
     /// Should be used to reset the action back to its original state.
     /// </summary>
-    protected abstract void OnCancelAction();
+    protected abstract void OnResetAction();
 }
