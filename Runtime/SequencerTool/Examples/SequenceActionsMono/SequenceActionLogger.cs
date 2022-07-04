@@ -1,4 +1,4 @@
-using SBN.SequencerTool;
+using SBN.SequencerTool.Actions;
 using UnityEngine;
 
 public class SequenceActionLogger : SequenceActionMono

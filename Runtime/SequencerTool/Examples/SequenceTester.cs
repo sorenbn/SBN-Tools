@@ -1,4 +1,4 @@
-using SBN.SequencerTool;
+using SBN.SequencerTool.Actions;
 using SBN.SequencerTool.Interfaces;
 using SBN.SequencerTool.Sequencers;
 using UnityEngine;

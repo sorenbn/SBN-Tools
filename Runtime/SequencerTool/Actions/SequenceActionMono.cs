@@ -2,7 +2,7 @@ using SBN.SequencerTool.Interfaces;
 using System;
 using UnityEngine;
 
-namespace SBN.SequencerTool
+namespace SBN.SequencerTool.Actions
 {
     /// <summary>
     /// A base class which can be derived from to create your own sequence actions.
