@@ -47,12 +47,12 @@ namespace SBN.UITool.Core.Managers
         {
             if (active)
             {
-                uiManager.CurrentWindow?.SetInteractable(false);
+                uiManager.CurrentWindow?.SetInteractableState(false);
             }
             else
             {
                 modal.OnActiveStatusChanged -= Modal_OnActiveStatusChanged;
-                uiManager.CurrentWindow?.SetInteractable(true);
+                uiManager.CurrentWindow?.SetInteractableState(true);
             }
         }
     }

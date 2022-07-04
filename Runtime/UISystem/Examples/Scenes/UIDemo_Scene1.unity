@@ -238,6 +238,18 @@ PrefabInstance:
       propertyPath: initialWindow
       value: 
       objectReference: {fileID: -8219850348912919151, guid: 1914bfe631a9425429418257afdcb2c0, type: 3}
+    - target: {fileID: 3025176958279148413, guid: f54d5793e078a794f8a26fbf18e5b5ee, type: 3}
+      propertyPath: preloadWindows.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3025176958279148413, guid: f54d5793e078a794f8a26fbf18e5b5ee, type: 3}
+      propertyPath: preloadWindows.Array.data[0]
+      value: 
+      objectReference: {fileID: -8219850348912919151, guid: 1914bfe631a9425429418257afdcb2c0, type: 3}
+    - target: {fileID: 3025176958279148413, guid: f54d5793e078a794f8a26fbf18e5b5ee, type: 3}
+      propertyPath: preloadWindows.Array.data[1]
+      value: 
+      objectReference: {fileID: 751406991487128068, guid: ec7fe5617b844b34b9e9cbe53999628e, type: 3}
     - target: {fileID: 3025176958722546595, guid: f54d5793e078a794f8a26fbf18e5b5ee, type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag
       value: 25
@@ -332,7 +344,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1016528530
 Transform:
   m_ObjectHideFlags: 0

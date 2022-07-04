@@ -4,11 +4,7 @@ namespace SBN.UITool.Core.Animation.Interfaces
 {
     public interface IAnimatable
     {
-        Action<IAnimatable> OnAnimationDone
-        {
-            get;
-            set;
-        }
+        public event Action OnAnimationDone;
 
         bool IsAnimating
         {
@@ -16,6 +12,7 @@ namespace SBN.UITool.Core.Animation.Interfaces
         }
 
         void BeginAnimation();
-        void StopAnimation();
+        void EndAnimation();
+        void ResetAnimation();
     } 
 }

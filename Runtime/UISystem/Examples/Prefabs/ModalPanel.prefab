@@ -997,6 +997,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8229170476962247402}
   - component: {fileID: 8229170476962247406}
+  - component: {fileID: 1000743467125800469}
+  - component: {fileID: 3228722442331381811}
   - component: {fileID: 8229170476962247404}
   - component: {fileID: 8229170476962247403}
   - component: {fileID: 8229170476962247407}
@@ -1044,6 +1046,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   confirmButton: {fileID: 5309848176442458636}
   cancelButton: {fileID: 6854117136593697844}
+--- !u!114 &1000743467125800469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8229170476962247401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44ce42bc9188b36419f5f009ed8f802f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actions:
+  - {fileID: 3228722442331381811}
+--- !u!114 &3228722442331381811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8229170476962247401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 074b3797a0dad524da70248f86c18abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 8229170476962247407}
 --- !u!222 &8229170476962247404
 CanvasRenderer:
   m_ObjectHideFlags: 0

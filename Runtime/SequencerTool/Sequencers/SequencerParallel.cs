@@ -37,7 +37,7 @@ namespace SBN.SequencerTool.Sequencers
 
         public void SkipSequence()
         {
-            if (actions == null || actions.Length == 0)
+            if (!IsRunning())
                 return;
 
             for (int i = 0; i < actions.Length; i++)
@@ -52,7 +52,7 @@ namespace SBN.SequencerTool.Sequencers
 
         public void ResetSequence()
         {
-            if (actions == null || actions.Length == 0)
+            if (!IsRunning())
                 return;
 
             for (int i = 0; i < actions.Length; i++)
@@ -67,7 +67,7 @@ namespace SBN.SequencerTool.Sequencers
 
         public bool IsRunning()
         {
-            if (actions == null)
+            if (actions == null || actions.Length == 0)
                 return false;
 
             for (int i = 0; i < actions.Length; i++)

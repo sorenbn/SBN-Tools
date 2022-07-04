@@ -1,3 +1,4 @@
+using SBN.UITool.Core.Animation.Interfaces;
 using SBN.UITool.Core.Managers;
 using System;
 using UnityEngine;
@@ -17,9 +18,11 @@ namespace SBN.UITool.Core.Elements
         protected CanvasGroup CanvasGroup;
         protected UIManager UIManager;
 
+        private IAnimatable uiAnimation;
+
         private void Awake()
         {
-            CanvasGroup = GetComponent<CanvasGroup>();
+            uiAnimation = GetComponent<IAnimatable>();
         }
 
         public virtual void Setup(UIManager uiManager)
@@ -32,40 +35,63 @@ namespace SBN.UITool.Core.Elements
             // TODO: tmp, until animations are in place.
 
             gameObject.SetActive(true);
-            Active = true;
 
-            OnActiveStatusChanged?.Invoke(Active);
+            if (uiAnimation != null)
+            {
+                SetInteractableState(false);
+
+                uiAnimation.OnAnimationDone += UiAnimation_OnShowAnimationDone;
+                uiAnimation.BeginAnimation();
+            }
+            else
+            {
+                SetActiveState(true);
+                SetInteractableState(true);
+            }
         }
 
         public virtual void Hide()
         {
             // TODO: tmp, until animations are in place.
 
-            Active = false;
+            SetInteractableState(false);
+            SetActiveState(false);
             gameObject.SetActive(false);
-
-            OnActiveStatusChanged?.Invoke(Active);
         }
 
         public virtual void ShowInstant()
         {
             gameObject.SetActive(true);
-            Active = true;
-
-            OnActiveStatusChanged?.Invoke(Active);
+            SetActiveState(true);
+            SetInteractableState(true);
         }
 
         public virtual void HideInstant()
         {
-            Active = false;
+            SetInteractableState(false);
+            SetActiveState(false);
             gameObject.SetActive(false);
+        }
 
+        public virtual void SetInteractableState(bool value)
+        {
+            if (CanvasGroup == null)
+                CanvasGroup = GetComponent<CanvasGroup>();
+
+            CanvasGroup.interactable = value;
+        }
+
+        private void SetActiveState(bool value)
+        {
+            Active = value;
             OnActiveStatusChanged?.Invoke(Active);
         }
 
-        public virtual void SetInteractable(bool value)
+        private void UiAnimation_OnShowAnimationDone()
         {
-            CanvasGroup.interactable = value;
+            uiAnimation.OnAnimationDone -= UiAnimation_OnShowAnimationDone;
+            SetActiveState(true);
+            SetInteractableState(true);
         }
     }
 }
