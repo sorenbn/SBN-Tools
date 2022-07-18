@@ -2,7 +2,7 @@ using SBN.SequencerTool.Actions;
 using UnityEngine;
 using DG.Tweening;
 
-namespace SBN.UITool.Core.Animation.Sequencers.Actions
+namespace SBN.UITool.Core.Animation.Animators.Sequencers.Actions
 {
     public class UICanvasGroupSequenceAction : SequenceActionMono
     {

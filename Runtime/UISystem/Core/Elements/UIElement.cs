@@ -32,8 +32,6 @@ namespace SBN.UITool.Core.Elements
 
         public virtual void Show()
         {
-            // TODO: tmp, until animations are in place.
-
             gameObject.SetActive(true);
 
             if (uiAnimation != null)

@@ -4,8 +4,13 @@ using SBN.UITool.Core.Animation.Interfaces;
 using System;
 using UnityEngine;
 
-namespace SBN.UITool.Core.Animation.Sequencers
+namespace SBN.UITool.Core.Animation.Animators.Sequencers
 {
+    /// <summary>
+    /// A component to run animations via the sequencer tool. 
+    /// This will automatically be picked up by the UIElement on the same gameobject
+    /// and played when required.
+    /// </summary>
     public class UIAnimatorSequencer : MonoBehaviour, IAnimatable
     {
         public event Action OnAnimationDone;
@@ -43,6 +48,5 @@ namespace SBN.UITool.Core.Animation.Sequencers
         }
     }
 
-    // TODO: Make a UIAnimatorSequencerParallel.cs which uses a parellel sequencer
     // TODO: Make a UIAnimator.cs which uses an animator controller
 }
