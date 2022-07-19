@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 751406991487128187}
   - component: {fileID: 751406991487128068}
-  - component: {fileID: 3523075179573878195}
+  - component: {fileID: 6612764084279346534}
   - component: {fileID: 64790522277821695}
+  - component: {fileID: 5172750938464971700}
   - component: {fileID: 751406991487128069}
   - component: {fileID: 751406991487128186}
   - component: {fileID: 751406991487128071}
@@ -59,7 +60,7 @@ MonoBehaviour:
   id: 2
   settings:
     DontDetroyOnLoad: 1
---- !u!114 &3523075179573878195
+--- !u!114 &6612764084279346534
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -68,11 +69,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 751406991487128184}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44ce42bc9188b36419f5f009ed8f802f, type: 3}
+  m_Script: {fileID: 11500000, guid: bfa5d0a9b0405f44b8ae87b5818aa51a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actions:
   - {fileID: 64790522277821695}
+  - {fileID: 5172750938464971700}
 --- !u!114 &64790522277821695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,6 +88,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 751406991487128071}
+  targetValue: 1
+  initialValue: 0
+  duration: 0.3
+  easing: 27
+--- !u!114 &5172750938464971700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 751406991487128184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10e84f1c801a69e48a4931afbd8562e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 751406991487128187}
+  targetValue: {x: 1, y: 1, z: 1}
+  initialValue: {x: 0.9, y: 0.9, z: 0.9}
+  duration: 0.3
+  easing: 27
 --- !u!222 &751406991487128069
 CanvasRenderer:
   m_ObjectHideFlags: 0
