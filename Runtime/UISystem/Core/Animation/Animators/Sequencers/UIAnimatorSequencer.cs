@@ -47,6 +47,4 @@ namespace SBN.UITool.Core.Animation.Animators.Sequencers
             sequencer.ResetSequence();
         }
     }
-
-    // TODO: Make a UIAnimator.cs which uses an animator controller
 }

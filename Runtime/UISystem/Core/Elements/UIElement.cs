@@ -50,7 +50,12 @@ namespace SBN.UITool.Core.Elements
 
         public virtual void Hide()
         {
-            // TODO: tmp, until animations are in place.
+            // TODO: figure out if need hide animations.
+            /* Look into maybe allowing different options:
+             * 1: No hide animations
+             * 2: Play 'show' animations in reverse
+             * 3: Custom hide animations (i.e. a seperate UIAnimator/UIAnimatorSequence etc)
+             */
 
             SetInteractableState(false);
             SetActiveState(false);
