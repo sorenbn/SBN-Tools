@@ -4,7 +4,7 @@ using UnityEngine;
 namespace SBN.UITool.Core.Animation.Utilities
 {
     /// <summary>
-    /// A utility script to invoke EndAnimation on your UIAnimator component.
+    /// A utility script to invoke EndAnimation on the UIAnimator component.
     /// In order for this to work, an exit transition must be present on the 
     /// animationclip this script is attached to.
     /// </summary>
