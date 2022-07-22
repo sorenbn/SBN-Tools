@@ -24,7 +24,7 @@ namespace SBN.UITool.Core.Animation.Animators
         private int hashedClip;
         private Animator animator;
 
-        public bool IsAnimating => throw new NotImplementedException();
+        public bool IsAnimating => animator.enabled;
 
         private void Awake()
         {
@@ -37,6 +37,7 @@ namespace SBN.UITool.Core.Animation.Animators
             }
 
             hashedClip = Animator.StringToHash(animationClip.name);
+            animator.enabled = false;
         }
 
         public void BeginAnimation()
@@ -44,21 +45,20 @@ namespace SBN.UITool.Core.Animation.Animators
             if (animationClip == null)
                 return;
 
+            animator.enabled = true;
             animator.Play(hashedClip, -1, 0.0f);
         }
 
         public void EndAnimation()
         {
-            if (animationClip == null)
-                return;
-
             OnAnimationDone?.Invoke();
+            animator.enabled = false;
         }
 
         public void ResetAnimation()
         {
-            if (animationClip == null)
-                return;
+            animator.enabled = false;
+            animator.enabled = true;
         }
     }
 }
