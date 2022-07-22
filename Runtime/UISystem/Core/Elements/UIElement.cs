@@ -5,6 +5,11 @@ using UnityEngine;
 
 namespace SBN.UITool.Core.Elements
 {
+    /// <summary>
+    /// Base class for all types of UI components.
+    /// Will handle functionality such as active state, interactibility, animations etc.
+    /// Derive from this class when creating custom UI components.
+    /// </summary>
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class UIElement : MonoBehaviour
     {
