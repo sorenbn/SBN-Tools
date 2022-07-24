@@ -38,18 +38,16 @@ namespace SBN.UITool.Core.Elements
         public virtual void Show()
         {
             gameObject.SetActive(true);
+            SetInteractableState(true);
 
             if (uiAnimation != null)
             {
-                SetInteractableState(false);
-
                 uiAnimation.OnAnimationDone += UiAnimation_OnShowAnimationDone;
                 uiAnimation.BeginAnimation();
             }
             else
             {
                 SetActiveState(true);
-                SetInteractableState(true);
             }
         }
 
@@ -62,8 +60,15 @@ namespace SBN.UITool.Core.Elements
              * 3: Custom hide animations (i.e. a seperate UIAnimator/UIAnimatorSequence etc)
              */
 
+            if (uiAnimation != null && uiAnimation.IsAnimating)
+            {
+                uiAnimation.EndAnimation();
+                uiAnimation.OnAnimationDone -= UiAnimation_OnShowAnimationDone;
+            }
+
             SetInteractableState(false);
             SetActiveState(false);
+
             gameObject.SetActive(false);
         }
 
@@ -78,7 +83,11 @@ namespace SBN.UITool.Core.Elements
 
         public virtual void HideInstant()
         {
-            uiAnimation?.EndAnimation();
+            if (uiAnimation != null && uiAnimation.IsAnimating)
+            {
+                uiAnimation.EndAnimation();
+                uiAnimation.OnAnimationDone -= UiAnimation_OnShowAnimationDone;
+            }
 
             SetInteractableState(false);
             SetActiveState(false);
