@@ -69,6 +69,8 @@ namespace SBN.UITool.Core.Elements
 
         public virtual void ShowInstant()
         {
+            uiAnimation?.EndAnimation();
+
             gameObject.SetActive(true);
             SetActiveState(true);
             SetInteractableState(true);
@@ -76,6 +78,8 @@ namespace SBN.UITool.Core.Elements
 
         public virtual void HideInstant()
         {
+            uiAnimation?.EndAnimation();
+
             SetInteractableState(false);
             SetActiveState(false);
             gameObject.SetActive(false);
