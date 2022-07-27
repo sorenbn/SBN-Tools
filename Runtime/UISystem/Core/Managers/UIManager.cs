@@ -7,10 +7,10 @@ using UnityEngine.SceneManagement;
 namespace SBN.UITool.Core.Managers
 {
     /// <summary>
-    /// The general UI Manager to control window changing
-    /// modal popup and UI Element animation state. 
+    /// The general UI Manager to control window changing, modal popup and UI Element animation state.
+    /// There should only exist one UIManager for the entire lifecycle of the project.
     /// 
-    /// There should only exist one of these for the entire lifecycle of the project.
+    /// Currently this system only supports one active window at a time. 
     /// </summary>
     public class UIManager : MonoBehaviour
     {
