@@ -4,6 +4,13 @@ using UnityEngine;
 
 namespace SBN.UITool.Core
 {
+    /// <summary>
+    /// A scriptable object to contain all UI Windows.
+    /// 
+    /// Each time a new window is added to the list 
+    /// the "Generate Ids" button must be invoked again to update the id enum.
+    /// The enum name is determined by the UI Window gameobject name.
+    /// </summary>
     [CreateAssetMenu(fileName = "UI Window Container", menuName = "SBN/UI Tool/UI Window Container")]
     public class UIWindowContainer : ScriptableObject
     {
