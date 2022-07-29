@@ -1,9 +1,12 @@
 {
     "name": "com.sbn.tools",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "displayName": "SBN Tools",
     "description": "A collection of handy unity tools.",
     "unity": "2020.3",
+    "references": [
+        "DOTween.Modules"
+    ],
     "author": {
         "name": "Søren Bach Nielsen",
         "email": "sorenbn@outlook.com",
