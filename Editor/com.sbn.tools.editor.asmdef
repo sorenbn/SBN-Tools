@@ -1,0 +1,16 @@
+{
+    "name": "com.sbn.tools.editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:fac3e8709b1f80c4c8d7bb795448f11f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
