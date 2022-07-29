@@ -1,9 +1,7 @@
 {
     "name": "com.sbn.tools.runtime",
     "rootNamespace": "",
-    "references": [
-        "GUID:0fcc69f128fcd954e97ec64ce9c18d3d"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
