@@ -15,8 +15,6 @@ namespace SBN.UITool.Core.Managers
     /// </summary>
     [RequireComponent(typeof(Canvas))]
     [RequireComponent(typeof(CanvasScaler))]
-    [RequireComponent(typeof(GraphicRaycaster))]
-    [RequireComponent(typeof(UIModalManager))]
     public class UIManager : MonoBehaviour
     {
         [Header("Components")]

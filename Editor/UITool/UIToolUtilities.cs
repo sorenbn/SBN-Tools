@@ -32,15 +32,14 @@ namespace SBN.EditorTools.UITool
             canvasScaler.referenceResolution = new Vector2(1920, 1080);
             canvasScaler.matchWidthOrHeight = 0.5f;
 
-            var modalManager = go.GetComponent<UIModalManager>();
-            SBNEditorUtilities.MoveComponentToTop(go, modalManager);
-            SBNEditorUtilities.MoveComponentToTop(go, uiManager);
-
             var eventSystemObj = new GameObject("EventSystem");
             eventSystemObj.transform.SetParent(go.transform);
-
             eventSystemObj.AddComponent<EventSystem>();
             eventSystemObj.AddComponent<StandaloneInputModule>();
+
+            var modalManager = go.AddComponent<UIModalManager>();
+            SBNEditorUtilities.MoveComponentToTop(go, modalManager);
+            SBNEditorUtilities.MoveComponentToTop(go, uiManager);
         }
 
         [MenuItem("SBN/UI Tool/Create UI Window")]
@@ -51,15 +50,23 @@ namespace SBN.EditorTools.UITool
 
             if (existingManager == null)
             {
-                Debug.LogError($"Please create a UI Manager before adding a UI Window");
+                Debug.LogError($"Please make sure a UI Manager is present in the scene before adding a UI Window");
                 return;
             }
 
             var go = new GameObject("UIWindow_NAME");
-            go.AddComponent<UIWindow>();
-        }
+            var window = go.AddComponent<UIWindow>();
+            go.AddComponent<GraphicRaycaster>();
 
-        // TODO: Eventsystem
-        // TODO: Modal
+            go.transform.SetParent(existingManager.transform, false);
+            go.transform.localScale = Vector3.one;
+
+            var canvas = go.GetComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+            SBNEditorUtilities.MoveComponentToTop(go, window);
+
+            Selection.SetActiveObjectWithContext(go, go);
+        }
     }
 }

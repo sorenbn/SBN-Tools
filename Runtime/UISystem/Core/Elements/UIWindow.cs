@@ -1,6 +1,7 @@
 using SBN.UITool.Core.Managers;
 using SBN.Utilities.Attributes;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SBN.UITool.Core.Elements
 {
@@ -12,6 +13,7 @@ namespace SBN.UITool.Core.Elements
     /// and every time a new UI Window is added, the "Generate Ids" button on 
     /// the scriptable object must be clicked to update the enum list of ids.
     /// </summary>
+    [RequireComponent(typeof(Canvas))]
     public class UIWindow : UIElement
     {
         [SerializeField, ReadOnly] private UIWindowId id;

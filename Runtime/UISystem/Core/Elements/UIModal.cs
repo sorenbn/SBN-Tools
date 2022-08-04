@@ -6,8 +6,7 @@ namespace SBN.UITool.Core.Elements
 {
     public class UIModal : UIElement
     {
-        public event Action OnConfirmClicked;
-        public event Action OnCancelClicked;
+        public event Action<bool> OnInteracted;
 
         [SerializeField] private Button confirmButton;
         [SerializeField] private Button cancelButton;
@@ -32,13 +31,13 @@ namespace SBN.UITool.Core.Elements
 
         protected virtual void OnConfirmedClicked()
         {
-            OnConfirmClicked?.Invoke();
+            OnInteracted?.Invoke(true);
             Hide();
         }
 
         protected virtual void OnCancelledClicked()
         {
-            OnCancelClicked?.Invoke();
+            OnInteracted?.Invoke(false);
             Hide();
         }
     }

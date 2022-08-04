@@ -1,4 +1,5 @@
 using SBN.UITool.Core.Elements;
+using System;
 using UnityEngine;
 
 namespace SBN.UITool.Core.Managers
@@ -6,23 +7,23 @@ namespace SBN.UITool.Core.Managers
     [RequireComponent(typeof(UIManager))]
     public class UIModalManager : MonoBehaviour
     {
-        private UIModal modal;
+        [SerializeField] private UIModal modalPrefab;
 
+        private UIModal modalInstance;
         private UIManager uiManager;
 
-        private void Awake()
-        {
+        private Action<bool> modalCallback;
 
+        private void Start()
+        {
             SetupModel();
         }
 
         private void SetupModel()
         {
-            modal = GetComponentInChildren<UIModal>();
-
-            if (modal == null)
+            if (modalPrefab == null)
             {
-                Debug.LogError($"ERROR: No modal found! Did you forget to set it in the inspector?", gameObject);
+                Debug.LogWarning($"WARNING: No modal prefab found! Did you forget to assign it in the inspector of: {gameObject.name}?", gameObject);
                 return;
             }
 
@@ -30,33 +31,31 @@ namespace SBN.UITool.Core.Managers
 
             if (uiManager == null)
             {
-                Debug.LogError($"ERROR: No UIManager found! This is required to be one the same object as this", gameObject);
+                Debug.LogError($"ERROR: No UIManager found! It is required to be one the same object as the UI Modal Manager", gameObject);
                 return;
             }
 
-            modal.Setup(uiManager);
-            modal.HideInstant();
+            modalInstance = Instantiate(modalPrefab, transform, false);
+            modalInstance.Setup(uiManager);
+            modalInstance.HideInstant();
         }
 
-        public UIModal ShowModal()
+        public void ShowModal(Action<bool> callback = null)
         {
-            modal.OnActiveStatusChanged += Modal_OnActiveStatusChanged;
-            modal.Show();
+            modalCallback = callback;
 
-            return modal;
+            uiManager.CurrentWindow?.SetInteractableState(false);
+            modalInstance.OnInteracted += Modal_OnInteracted;
+
+            modalInstance.Show();
         }
 
-        private void Modal_OnActiveStatusChanged(bool active)
+        private void Modal_OnInteracted(bool confirm)
         {
-            if (active)
-            {
-                uiManager.CurrentWindow?.SetInteractableState(false);
-            }
-            else
-            {
-                modal.OnActiveStatusChanged -= Modal_OnActiveStatusChanged;
-                uiManager.CurrentWindow?.SetInteractableState(true);
-            }
+            modalInstance.OnInteracted -= Modal_OnInteracted;
+            uiManager.CurrentWindow?.SetInteractableState(true);
+
+            modalCallback?.Invoke(confirm);
         }
     }
 }
