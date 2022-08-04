@@ -48,7 +48,7 @@ namespace SBN.UITool.Core.Elements
         public struct Settings
         {
             [Tooltip("Should this window persist between different scenes in order to be availble any time during game lifecycle?")]
-            public bool DontDetroyOnLoad;
+            public bool DontDestroyOnLoad;
         }
     }
 }

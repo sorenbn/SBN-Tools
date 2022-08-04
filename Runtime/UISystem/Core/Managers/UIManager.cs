@@ -134,7 +134,7 @@ namespace SBN.UITool.Core.Managers
         private void UnloadWindows()
         {
             var unloadWindows = allWindows
-            .Where(x => !x.Value.GetSettings().DontDetroyOnLoad)
+            .Where(x => !x.Value.GetSettings().DontDestroyOnLoad)
             .ToList();
 
             foreach (var window in unloadWindows)
