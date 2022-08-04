@@ -579,7 +579,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 250, y: 0}
   m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &7973182126416946616
@@ -997,9 +997,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8229170476962247402}
   - component: {fileID: 8229170476962247406}
-  - component: {fileID: 3777671894435981866}
-  - component: {fileID: 3228722442331381811}
-  - component: {fileID: 5399305786481551474}
   - component: {fileID: 8229170476962247404}
   - component: {fileID: 8229170476962247403}
   - component: {fileID: 8229170476962247407}
@@ -1047,55 +1044,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   confirmButton: {fileID: 5309848176442458636}
   cancelButton: {fileID: 6854117136593697844}
---- !u!114 &3777671894435981866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8229170476962247401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfa5d0a9b0405f44b8ae87b5818aa51a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actions:
-  - {fileID: 3228722442331381811}
-  - {fileID: 5399305786481551474}
---- !u!114 &3228722442331381811
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8229170476962247401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 074b3797a0dad524da70248f86c18abc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 8229170476962247407}
-  targetValue: 1
-  initialValue: 0
-  duration: 0.25
-  easing: 27
---- !u!114 &5399305786481551474
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8229170476962247401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96d1daa839ac30846822af68ac3fb81e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 8229170475434066150}
-  targetValue: {x: 0, y: 0}
-  initialValue: {x: 0, y: -300}
-  duration: 0.25
-  easing: 27
 --- !u!222 &8229170476962247404
 CanvasRenderer:
   m_ObjectHideFlags: 0
