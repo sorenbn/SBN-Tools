@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace SBN.UITool.EditorTool
+namespace SBN.EditorTools.UITool
 {
     [CustomEditor(typeof(UIWindowContainer))]
     public class UIWindowContainerEditor : Editor

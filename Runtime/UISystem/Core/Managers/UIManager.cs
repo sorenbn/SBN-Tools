@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace SBN.UITool.Core.Managers
 {
@@ -12,6 +13,10 @@ namespace SBN.UITool.Core.Managers
     /// 
     /// Currently this system only supports one active window at a time. 
     /// </summary>
+    [RequireComponent(typeof(Canvas))]
+    [RequireComponent(typeof(CanvasScaler))]
+    [RequireComponent(typeof(GraphicRaycaster))]
+    [RequireComponent(typeof(UIModalManager))]
     public class UIManager : MonoBehaviour
     {
         [Header("Components")]

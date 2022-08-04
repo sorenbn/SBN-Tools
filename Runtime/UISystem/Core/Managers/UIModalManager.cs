@@ -6,23 +6,26 @@ namespace SBN.UITool.Core.Managers
     [RequireComponent(typeof(UIManager))]
     public class UIModalManager : MonoBehaviour
     {
-        [SerializeField] private UIModal modal;
+        private UIModal modal;
 
         private UIManager uiManager;
 
         private void Awake()
         {
-            if (modal == null)
-            {
-                Debug.LogError($"ERROR: No modal found! Did you forget to set it in the inspector?", gameObject);
-                return;
-            }
 
             SetupModel();
         }
 
         private void SetupModel()
         {
+            modal = GetComponentInChildren<UIModal>();
+
+            if (modal == null)
+            {
+                Debug.LogError($"ERROR: No modal found! Did you forget to set it in the inspector?", gameObject);
+                return;
+            }
+
             uiManager = GetComponent<UIManager>();
 
             if (uiManager == null)

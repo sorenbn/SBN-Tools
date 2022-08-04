@@ -2,7 +2,7 @@ using SBN.Utilities.Attributes;
 using UnityEditor;
 using UnityEngine;
 
-namespace SBN.EditorUtils.Editor
+namespace SBN.EditorTools.PropertyDrawers
 {
     [CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
     public class ReadOnlyDrawer : PropertyDrawer
