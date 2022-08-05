@@ -1,6 +1,10 @@
 # sbn-tools
 A collection of handy unity tools
 
+# Installation
+Simply open the package manager inside unity, click the 'plus' icon in upper left corner and hit 'Add package from git URL'.
+Use the url: https://github.com/sorenbn/sbn-tools.git
+
 ### Command System
 A simple command pattern implementation.
 
