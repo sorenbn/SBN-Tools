@@ -3,14 +3,11 @@ using System.Collections.Generic;
 
 namespace SBN.Events
 {
-    // TODO:
-    // GlobalEvents<TEvent>, try it. 
-
-    public static class GlobalEvents
+    public static class GlobalEvents<TEvent> where TEvent : new()
     {
-        private static Dictionary<Type, List<Action<object>>> eventListeners = new Dictionary<Type, List<Action<object>>>();
+        private static Dictionary<Type, List<Action<TEvent>>> eventListeners = new Dictionary<Type, List<Action<TEvent>>>();
 
-        public static void Publish<TEvent>(object args) where TEvent : new()
+        public static void Publish(TEvent args)
         {
             var type = typeof(TEvent);
 
@@ -21,12 +18,12 @@ namespace SBN.Events
             }
         }
 
-        public static void Subscribe<TEvent>(Action<object> callback) where TEvent : new()
+        public static void Subscribe(Action<TEvent> callback)
         {
             var type = typeof(TEvent);
 
             if (!eventListeners.ContainsKey(type))
-                eventListeners.Add(type, new List<Action<object>>());
+                eventListeners.Add(type, new List<Action<TEvent>>());
 
             var listeners = eventListeners[type];
 
@@ -34,7 +31,7 @@ namespace SBN.Events
                 listeners.Add(callback);
         }
 
-        public static void Unsubscribe<TEvent>(Action<object> callback) where TEvent : new()
+        public static void Unsubscribe(Action<TEvent> callback)
         {
             var type = typeof(TEvent);
 
