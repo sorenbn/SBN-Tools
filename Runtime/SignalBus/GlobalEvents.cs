@@ -3,7 +3,17 @@ using System.Collections.Generic;
 
 namespace SBN.Events
 {
-    public static class GlobalEvents<TEvent> where TEvent : new()
+    /// <summary>
+    /// Very basic generic global events system.
+    /// Can be used to publish, subscribe and unsubscribe to events 
+    /// all over the application. 
+    /// 
+    /// This eventhandler also makes sure there's no accidental 
+    /// 'double subscriptions' by using a HashSet. 
+    /// 
+    /// Events (TEvent) must be a struct.
+    /// </summary>
+    public static class GlobalEvents<TEvent> where TEvent : struct
     {
         private static HashSet<Action<TEvent>> subscriptions = new HashSet<Action<TEvent>>();
 
