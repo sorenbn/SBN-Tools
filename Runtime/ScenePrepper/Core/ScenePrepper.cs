@@ -34,12 +34,25 @@ namespace SBN.SceneHelper.Core
         private List<ISceneObserverAsync> sceneObserversAsync;
         private Coroutine initializeRoutine;
 
+        private bool initializing;
+
         private void Awake()
         {
             if (onlyEvaluateChildren)
                 GetObserversInChildren();
             else
                 GetObserversInScene();
+        }
+
+        private void Start()
+        {
+            if (initializing)
+            {
+                StartCoroutine(c_WaitForSceneReady());
+                return;
+            }
+
+            ReadyScene();
         }
 
         private void OnEnable()
@@ -72,11 +85,23 @@ namespace SBN.SceneHelper.Core
                 return;
             }
 
-            initializeRoutine = StartCoroutine(InitializeScene(scene));
+            initializeRoutine = StartCoroutine(c_InitializeScene(scene));
         }
 
-        private IEnumerator InitializeScene(Scene scene)
+        private void ReadyScene()
         {
+            var activeScene = SceneManager.GetActiveScene();
+
+            for (int i = 0; i < sceneObservers.Count; i++)
+                sceneObservers[i].OnSceneReady(activeScene);
+
+            OnSceneReady?.Invoke(activeScene);
+        }
+
+        private IEnumerator c_InitializeScene(Scene scene)
+        {
+            initializing = true;
+
             OnSceneIntialize?.Invoke(scene);
 
             for (int i = 0; i < sceneObservers.Count; i++)
@@ -85,10 +110,15 @@ namespace SBN.SceneHelper.Core
             for (int i = 0; i < sceneObserversAsync.Count; i++)
                 yield return sceneObserversAsync[i].OnSceneInitializeAsync(scene);
 
-            for (int i = 0; i < sceneObservers.Count; i++)
-                sceneObservers[i].OnSceneReady(scene);
+            initializing = false;
+        }
 
-            OnSceneReady?.Invoke(scene);
+        private IEnumerator c_WaitForSceneReady()
+        {
+            while (initializing)
+                yield return null;
+
+            ReadyScene();
         }
 
         public void Subscribe<T>(T observer) where T : ISceneObserver
