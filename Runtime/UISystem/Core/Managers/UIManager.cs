@@ -27,10 +27,16 @@ namespace SBN.UITool.Core.Managers
 
         private Dictionary<UIWindowId, UIWindow> allWindows = new Dictionary<UIWindowId, UIWindow>();
 
-        public UIModalManager ModalManager { get;
-            private set; }
-        public UIWindow CurrentWindow { get;
-            private set; }
+        public UIModalManager ModalManager
+        {
+            get;
+            private set;
+        }
+        public UIWindow CurrentWindow
+        {
+            get;
+            private set;
+        }
 
         private void Awake()
         {
@@ -75,7 +81,11 @@ namespace SBN.UITool.Core.Managers
             if (CurrentWindow != null && CurrentWindow?.Id == windowId)
                 return;
 
-            CurrentWindow?.Hide();
+            if (CurrentWindow != null)
+            {
+                windowHistory.Push(CurrentWindow);
+                CurrentWindow.Hide();
+            }
 
             if (windowId == UIWindowId.None)
             {
@@ -94,8 +104,6 @@ namespace SBN.UITool.Core.Managers
 
             CurrentWindow = target;
             CurrentWindow.Show();
-
-            windowHistory.Push(CurrentWindow);
         }
 
         public void HideWindow(UIWindowId windowId)
