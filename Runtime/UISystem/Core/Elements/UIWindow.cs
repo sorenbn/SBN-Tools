@@ -1,5 +1,6 @@
 using SBN.UITool.Core.Managers;
 using SBN.Utilities.Attributes;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,8 @@ namespace SBN.UITool.Core.Elements
     public class UIWindow : UIElement
     {
         [SerializeField, ReadOnly] private UIWindowId id;
+        [Tooltip("A default back button which will trigger to go back in window history. Can be null if no back button exists for this window.")]
+        [SerializeField] private Button defaultBackButton;
         [SerializeField] private Settings settings;
 
         private UIElement[] uiElements;
@@ -29,6 +32,22 @@ namespace SBN.UITool.Core.Elements
 #endif
         }
 
+        protected virtual void OnEnable()
+        {
+            if (defaultBackButton != null)
+            {
+                defaultBackButton.onClick.AddListener(OnBackButtonClick);
+            }
+        }
+
+        protected virtual void OnDisable()
+        {
+            if (defaultBackButton != null)
+            {
+                defaultBackButton.onClick.RemoveListener(OnBackButtonClick);
+            }
+        }
+
         public override void Setup(UIManager uiManager)
         {
             base.Setup(uiManager);
@@ -39,6 +58,11 @@ namespace SBN.UITool.Core.Elements
             // since GetComponentsInChildren also gets on the object itself
             for (int i = 1; i < uiElements.Length; i++)
                 uiElements[i].Setup(uiManager);
+        }
+
+        protected virtual void OnBackButtonClick()
+        {
+            UIManager.GoBack();
         }
 
         public virtual Settings GetSettings()

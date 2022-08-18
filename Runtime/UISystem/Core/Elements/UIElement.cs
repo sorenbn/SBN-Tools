@@ -25,7 +25,7 @@ namespace SBN.UITool.Core.Elements
 
         private IAnimatable uiAnimation;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             uiAnimation = GetComponent<IAnimatable>();
         }
