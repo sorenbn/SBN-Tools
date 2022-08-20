@@ -78,7 +78,7 @@ namespace SBN.UITool.Core.Managers
 
         public void ShowWindow(UIWindowId windowId)
         {
-            if (CurrentWindow != null && CurrentWindow?.Id == windowId)
+            if (CurrentWindow != null && CurrentWindow.Id == windowId)
                 return;
 
             if (CurrentWindow != null)
@@ -134,6 +134,8 @@ namespace SBN.UITool.Core.Managers
                 return;
 
             var nextWindow = windowHistory.Pop();
+            CurrentWindow = null;
+
             ShowWindow(nextWindow.Id);
         }
 
