@@ -133,8 +133,13 @@ namespace SBN.UITool.Core.Managers
             if (windowHistory.Count == 0)
                 return;
 
+            if (CurrentWindow != null)
+            {
+                CurrentWindow.Hide();
+                CurrentWindow = null;
+            }
+
             var nextWindow = windowHistory.Pop();
-            CurrentWindow = null;
 
             ShowWindow(nextWindow.Id);
         }
