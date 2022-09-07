@@ -62,20 +62,20 @@ namespace SBN.EditorTools.UITool
 
         public void AssignIds()
         {
-            //var arrayProp = serializedObject.FindProperty("windows");
+            var arrayProp = serializedObject.FindProperty("windows");
 
-            //for (int i = 0; i < arrayProp.arraySize; i++)
-            //{
-            //    var uiWindowProp = arrayProp.GetArrayElementAtIndex(i);
+            for (int i = 0; i < arrayProp.arraySize; i++)
+            {
+                var uiWindowProp = arrayProp.GetArrayElementAtIndex(i);
 
-            //    var enumSerializedObject = new SerializedObject(uiWindowProp.objectReferenceValue);
-            //    var enumIdProperty = enumSerializedObject.FindProperty("id");
+                var enumSerializedObject = new SerializedObject(uiWindowProp.objectReferenceValue);
+                var enumIdProperty = enumSerializedObject.FindProperty("id");
 
-            //    enumIdProperty.enumValueFlag = i + 1;
-            //    enumSerializedObject.ApplyModifiedProperties();
-            //}
+                enumIdProperty.enumValueFlag = i + 1;
+                enumSerializedObject.ApplyModifiedProperties();
+            }
 
-            //serializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();
         }
     } 
 }
