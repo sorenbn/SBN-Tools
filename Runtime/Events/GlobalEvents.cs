@@ -5,40 +5,34 @@ using System.Collections.Generic;
 
 namespace SBN.Events
 {
-    public class GlobalEvents
+    /// <summary>
+    /// Very basic generic global events system.
+    /// Can be used to publish, subscribe and unsubscribe to events 
+    /// all over the application. 
+    /// 
+    /// This eventhandler also makes sure there's no accidental 
+    /// 'double subscriptions' by using a HashSet. 
+    /// 
+    /// Events (TEvent) must be a struct.
+    /// </summary>
+    public static class GlobalEvents<TEvent> where TEvent : struct
     {
-        private Dictionary<Type, List<Action<GameEvent>>> allSubscriptions = new Dictionary<Type, List<Action<GameEvent>>>();
+        private static HashSet<Action<TEvent>> subscriptions = new HashSet<Action<TEvent>>();
 
-        public void Publish(GameEvent data)
+        public static void Publish(TEvent args)
         {
-            if (allSubscriptions.TryGetValue(data.GetType(), out var subscriptions))
-            {
-                foreach (var subscriber in subscriptions)
-                    subscriber?.Invoke(data);
-            }
+            foreach (var subscription in subscriptions)
+                subscription.Invoke(args);
         }
 
-        public void Subscribe<T>(Action<GameEvent> callback) where T : GameEvent
+        public static void Subscribe(Action<TEvent> callback)
         {
-            var type = typeof(T);
-
-            if (!allSubscriptions.ContainsKey(type))
-                allSubscriptions.Add(type, new List<Action<GameEvent>> { });
-
-            // Figure out how to store generic Action<T> callbacks properly
-            //Action<object> wrapperCallback = args => callback((T)args);
-
-            allSubscriptions[type].Add(callback);
+            subscriptions.Add(callback);
         }
 
-        public void Unsubscribe<T>(Action<GameEvent> callback) where T : GameEvent
+        public static void Unsubscribe(Action<TEvent> callback)
         {
-            var type = typeof(T);
-
-            if (!allSubscriptions.ContainsKey(type))
-                return;
-
-            allSubscriptions[type].Remove(callback);
+            subscriptions.Remove(callback);
         }
     }
 }
