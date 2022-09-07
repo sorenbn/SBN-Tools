@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace SBN.Events
 {
-    public static class GlobalEvents
+    public class GlobalEvents
     {
-        private static Dictionary<Type, List<Action<GameEvent>>> allSubscriptions = new Dictionary<Type, List<Action<GameEvent>>>();
+        private Dictionary<Type, List<Action<GameEvent>>> allSubscriptions = new Dictionary<Type, List<Action<GameEvent>>>();
 
-        public static void Publish(GameEvent data)
+        public void Publish(GameEvent data)
         {
             if (allSubscriptions.TryGetValue(data.GetType(), out var subscriptions))
             {
@@ -18,7 +18,7 @@ namespace SBN.Events
             }
         }
 
-        public static void Subscribe<T>(Action<GameEvent> callback) where T : GameEvent
+        public void Subscribe<T>(Action<GameEvent> callback) where T : GameEvent
         {
             var type = typeof(T);
 
@@ -31,7 +31,7 @@ namespace SBN.Events
             allSubscriptions[type].Add(callback);
         }
 
-        public static void Unsubscribe<T>(Action<GameEvent> callback) where T : GameEvent
+        public void Unsubscribe<T>(Action<GameEvent> callback) where T : GameEvent
         {
             var type = typeof(T);
 
