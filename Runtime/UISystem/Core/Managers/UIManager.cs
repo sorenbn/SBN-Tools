@@ -1,4 +1,5 @@
-using SBN.UITool.Core.Elements;
+using SBN.Events;
+using SBN.UITool.Core.Elements.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -17,22 +18,24 @@ namespace SBN.UITool.Core.Managers
     [RequireComponent(typeof(CanvasScaler))]
     public class UIManager : MonoBehaviour
     {
-        [Header("Components")]
-        [SerializeField] private UIWindowContainer windowContainer;
-
         [Header("Settings")]
-        [SerializeField] private UIWindow initialWindow;
-        [SerializeField] private List<UIWindow> preloadWindows;
-        private Stack<UIWindow> windowHistory = new Stack<UIWindow>();
+        [SerializeField] private UIWindowAsset initialWindow;
+        [SerializeField] private List<UIWindowAsset> preloadWindows;
 
-        private Dictionary<UIWindowId, UIWindow> allWindows = new Dictionary<UIWindowId, UIWindow>();
+        private Stack<(UIWindowAsset Asset, UIWindow Instance)> windowHistory = new Stack<(UIWindowAsset, UIWindow)>();
+        private Dictionary<UIWindowAsset, UIWindow> windows = new Dictionary<UIWindowAsset, UIWindow>();
 
         public UIModalManager ModalManager
         {
             get;
             private set;
         }
-        public UIWindow CurrentWindow
+        public UIWindow CurrentWindowInstance
+        {
+            get;
+            private set;
+        }
+        public UIWindowAsset CurrentWindowAsset
         {
             get;
             private set;
@@ -50,20 +53,20 @@ namespace SBN.UITool.Core.Managers
         {
             for (int i = 0; i < preloadWindows.Count; i++)
             {
-                var screen = preloadWindows[i];
-                var element = Instantiate(screen, transform);
+                var windowObject = preloadWindows[i];
+                var window = Instantiate(windowObject.Prefab, transform);
 
-                element.Setup(this);
-                element.HideInstant();
+                window.Setup(this);
+                window.HideInstant();
 
-                allWindows.Add(screen.Id, element);
+                windows.Add(windowObject, window);
             }
         }
 
         private void Start()
         {
             if (initialWindow != null)
-                ShowWindow(initialWindow.Id);
+                ShowWindow(initialWindow);
         }
 
         private void OnEnable()
@@ -76,54 +79,43 @@ namespace SBN.UITool.Core.Managers
             SceneManager.sceneUnloaded -= SceneManager_sceneUnloaded;
         }
 
-        public void ShowWindow(UIWindowId windowId)
+        public void ShowWindow(UIWindowAsset newWindowAsset)
         {
-            if (CurrentWindow != null && CurrentWindow.Id == windowId)
+            if (newWindowAsset == null)
                 return;
 
-            if (CurrentWindow != null)
+            if (CurrentWindowAsset != null)
             {
-                windowHistory.Push(CurrentWindow);
-                CurrentWindow.Hide();
+                if (CurrentWindowAsset == newWindowAsset)
+                    return;
+
+                CurrentWindowInstance.Hide();
+                windowHistory.Push((CurrentWindowAsset, CurrentWindowInstance));
             }
 
-            if (windowId == UIWindowId.None)
-            {
-                HideAllWindows();
-                return;
-            }
+            if (!windows.TryGetValue(newWindowAsset, out var newWindowInstance))
+                newWindowInstance = CreateUIWindowInstance(newWindowAsset);
 
-            if (!allWindows.TryGetValue(windowId, out var target))
-            {
-                var nextWindow = Instantiate(windowContainer.GetWindowById(windowId), transform);
-                nextWindow.Setup(this);
+            CurrentWindowAsset = newWindowAsset;
+            CurrentWindowInstance = newWindowInstance;
 
-                target = nextWindow;
-                allWindows.Add(windowId, nextWindow);
-            }
-
-            CurrentWindow = target;
-            CurrentWindow.Show();
+            CurrentWindowInstance.Show();
         }
 
-        public void HideWindow(UIWindowId windowId)
+        public void HideWindow(UIWindowAsset windowAsset)
         {
-            if (!allWindows.TryGetValue(windowId, out var target))
-            {
-                var nextWindow = Instantiate(windowContainer.GetWindowById(windowId), transform);
-                nextWindow.Setup(this);
+            if (!windows.TryGetValue(windowAsset, out var windowInstance))
+                return;
 
-                target = nextWindow;
-                allWindows.Add(windowId, nextWindow);
-            }
-
-            target.Hide();
+            windowInstance.Hide();
         }
 
         public void HideAllWindows()
         {
-            CurrentWindow?.HideInstant();
-            CurrentWindow = null;
+            CurrentWindowInstance?.HideInstant();
+
+            CurrentWindowInstance = null;
+            CurrentWindowAsset = null;
 
             ClearHistory();
         }
@@ -133,15 +125,17 @@ namespace SBN.UITool.Core.Managers
             if (windowHistory.Count == 0)
                 return;
 
-            if (CurrentWindow != null)
+            if (CurrentWindowAsset != null)
             {
-                CurrentWindow.Hide();
-                CurrentWindow = null;
+                CurrentWindowInstance.Hide();
+
+                CurrentWindowInstance = null;
+                CurrentWindowAsset = null;
             }
 
             var nextWindow = windowHistory.Pop();
 
-            ShowWindow(nextWindow.Id);
+            ShowWindow(nextWindow.Asset);
         }
 
         public void ClearHistory()
@@ -151,13 +145,13 @@ namespace SBN.UITool.Core.Managers
 
         private void UnloadWindows()
         {
-            var unloadWindows = allWindows
+            var unloadWindows = windows
             .Where(x => !x.Value.GetSettings().DontDestroyOnLoad)
             .ToList();
 
             foreach (var window in unloadWindows)
             {
-                allWindows.Remove(window.Key);
+                windows.Remove(window.Key);
                 Destroy(window.Value.gameObject);
             }
 
@@ -167,6 +161,22 @@ namespace SBN.UITool.Core.Managers
         private void SceneManager_sceneUnloaded(Scene scene)
         {
             UnloadWindows();
+        }
+
+        private UIWindow CreateUIWindowInstance(UIWindowAsset newWindowObject)
+        {
+            var newWindowInstance = Instantiate(newWindowObject.Prefab, transform);
+            newWindowInstance.Setup(this);
+
+            windows.Add(newWindowObject, newWindowInstance);
+
+            GlobalEvents<UIEventNewWindowCreated>.Publish(new UIEventNewWindowCreated 
+            { 
+                WindowAsset = newWindowObject, 
+                WindowInstance = newWindowInstance 
+            });
+
+            return newWindowInstance;
         }
     }
 }

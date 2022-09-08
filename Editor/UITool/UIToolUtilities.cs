@@ -1,4 +1,4 @@
-using SBN.UITool.Core.Elements;
+using SBN.UITool.Core.Elements.Windows;
 using SBN.UITool.Core.Managers;
 using UnityEditor;
 using UnityEngine;

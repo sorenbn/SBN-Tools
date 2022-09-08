@@ -44,7 +44,7 @@ namespace SBN.UITool.Core.Managers
         {
             modalCallback = callback;
 
-            uiManager.CurrentWindow?.SetInteractableState(false);
+            uiManager.CurrentWindowInstance?.SetInteractableState(false);
             modalInstance.OnInteracted += Modal_OnInteracted;
 
             modalInstance.Show();
@@ -53,7 +53,7 @@ namespace SBN.UITool.Core.Managers
         private void Modal_OnInteracted(bool confirm)
         {
             modalInstance.OnInteracted -= Modal_OnInteracted;
-            uiManager.CurrentWindow?.SetInteractableState(true);
+            uiManager.CurrentWindowInstance?.SetInteractableState(true);
 
             modalCallback?.Invoke(confirm);
         }
