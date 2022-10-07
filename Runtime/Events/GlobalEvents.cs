@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-// https://stackoverflow.com/questions/14518139/how-cast-generic-t-to-action-to-get-the-method-params
-
 namespace SBN.Events
 {
     /// <summary>
@@ -21,7 +19,11 @@ namespace SBN.Events
 
         public static void Publish(TEvent args)
         {
-            foreach (var subscription in subscriptions)
+            // Small 'fix' for preventing change in subscription collection
+            // while an event is already being published
+            var immutableSubscriptions = new HashSet<Action<TEvent>>(subscriptions);
+
+            foreach (var subscription in immutableSubscriptions)
                 subscription.Invoke(args);
         }
 
