@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace SBN.Utilities.ExtensionMethods
 {
@@ -11,11 +11,11 @@ namespace SBN.Utilities.ExtensionMethods
         /// NOTE: Can be expensive for big scenes with lots of hierarchy structures.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="_"></param>
+        /// <param name="component"></param>
         /// <returns></returns>
-        public static T GetScriptOfType<T>(this Object _) where T : class
+        public static T GetScriptOfType<T>(this Component component) where T : class
         {
-            var scripts = Object.FindObjectsOfType<MonoBehaviour>();
+            var scripts = Object.FindObjectsOfType<MonoBehaviour>().Where(x => x.gameObject.scene.buildIndex == component.gameObject.scene.buildIndex);
 
             foreach (var script in scripts)
             {
@@ -31,10 +31,10 @@ namespace SBN.Utilities.ExtensionMethods
         /// NOTE: Can be expensive for big scenes with lots of hierarchy structures.
         /// </summary>
         /// <typeparam name="T">The type of object it needs to find</typeparam>
-        public static List<T> GetAllTypesOf<T>(this Object _, bool includeInactive = true)
+        public static List<T> GetAllTypesOf<T>(this Component component, bool includeInactive = true)
         {
             var types = new List<T>();
-            var root = SceneManager.GetActiveScene().GetRootGameObjects();
+            var root = component.gameObject.scene.GetRootGameObjects();
 
             foreach (var child in root)
             {

@@ -13,8 +13,7 @@ namespace SBN.SceneHelper.Core
     /// A system to help prepare scenes with heavy loading
     /// or just a better flow of control when changing scenes 
     /// and which objects are loaded and prepared in which order.
-    /// Use the standard SceneManager.LoadScene(). 
-    /// NOTE: This system is only built to work with LoadSceneMode.Single
+    /// Use the standard SceneManager.LoadScene()
     /// 
     /// Only one of these must exist in each scene.
     /// </summary>
@@ -79,6 +78,9 @@ namespace SBN.SceneHelper.Core
 
         private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode loadMode)
         {
+            if (scene.name != gameObject.scene.name)
+                return;
+
             if (initializeRoutine != null)
             {
                 Debug.LogWarning($"WARNING: Scene is already being initialized");
@@ -90,7 +92,7 @@ namespace SBN.SceneHelper.Core
 
         private void ReadyScene()
         {
-            var activeScene = SceneManager.GetActiveScene();
+            var activeScene = gameObject.scene;
 
             for (int i = 0; i < sceneObservers.Count; i++)
                 sceneObservers[i].OnSceneReady(activeScene);
