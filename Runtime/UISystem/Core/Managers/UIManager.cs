@@ -160,6 +160,9 @@ namespace SBN.UITool.Core.Managers
 
         private void SceneManager_sceneUnloaded(Scene scene)
         {
+            if (gameObject.scene.name != scene.name)
+                return;
+
             UnloadWindows();
         }
 
