@@ -1,5 +1,8 @@
+using Cysharp.Threading.Tasks;
 using SBN.Events;
+using SBN.SceneLoading;
 using SBN.UITool.Core.Elements.Windows;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -18,6 +21,8 @@ namespace SBN.UITool.Core.Managers
     [RequireComponent(typeof(CanvasScaler))]
     public class UIManager : MonoBehaviour
     {
+        private static UIManager instance;
+
         [Header("Settings")]
         [SerializeField] private UIWindowAsset initialWindow;
         [SerializeField] private List<UIWindowAsset> preloadWindows;
@@ -25,11 +30,6 @@ namespace SBN.UITool.Core.Managers
         private Stack<(UIWindowAsset Asset, UIWindow Instance)> windowHistory = new Stack<(UIWindowAsset, UIWindow)>();
         private Dictionary<UIWindowAsset, UIWindow> windows = new Dictionary<UIWindowAsset, UIWindow>();
 
-        public UIModalManager ModalManager
-        {
-            get;
-            private set;
-        }
         public UIWindow CurrentWindowInstance
         {
             get;
@@ -43,43 +43,43 @@ namespace SBN.UITool.Core.Managers
 
         private void Awake()
         {
-            ModalManager = GetComponent<UIModalManager>();
-
-            SetupPreloadedWindows();
-            DontDestroyOnLoad(gameObject);
-        }
-
-        private void SetupPreloadedWindows()
-        {
-            for (int i = 0; i < preloadWindows.Count; i++)
+            if (instance != null)
             {
-                var windowObject = preloadWindows[i];
-                var window = Instantiate(windowObject.Prefab, transform);
-
-                window.Setup(this);
-                window.HideInstant();
-
-                windows.Add(windowObject, window);
+                Destroy(gameObject);
+                return;
             }
+
+            instance = this;
+
+            DontDestroyOnLoad(gameObject);
         }
 
         private void Start()
         {
             if (initialWindow != null)
-                ShowWindow(initialWindow);
+                ShowWindow(initialWindow, gameObject.scene);
         }
 
         private void OnEnable()
         {
+            SceneManager.sceneLoaded += SceneManager_sceneLoaded;
             SceneManager.sceneUnloaded += SceneManager_sceneUnloaded;
         }
 
         private void OnDisable()
         {
+            SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
             SceneManager.sceneUnloaded -= SceneManager_sceneUnloaded;
         }
 
-        public void ShowWindow(UIWindowAsset newWindowAsset)
+        // TODO: Make ShowWindow return window?
+        // TODO: Make an ShowWindowAsync which returns the windows once it's shown perhaps?
+        public void ShowWindow(UIWindowAsset newWindowAsset, Scene ownerScene)
+        {
+            ShowWindowAsync(newWindowAsset, ownerScene).Forget();
+        }
+
+        private async UniTaskVoid ShowWindowAsync(UIWindowAsset newWindowAsset, Scene ownerScene)
         {
             if (newWindowAsset == null)
                 return;
@@ -94,12 +94,36 @@ namespace SBN.UITool.Core.Managers
             }
 
             if (!windows.TryGetValue(newWindowAsset, out var newWindowInstance))
-                newWindowInstance = CreateUIWindowInstance(newWindowAsset);
+                newWindowInstance = await LoadWindow(newWindowAsset);
 
             CurrentWindowAsset = newWindowAsset;
             CurrentWindowInstance = newWindowInstance;
 
-            CurrentWindowInstance.Show();
+            newWindowInstance.Setup(this, ownerScene);
+            newWindowInstance.SetFocus(true);
+
+            newWindowInstance.Show();
+        }
+
+        private async UniTask<UIWindow> LoadWindow(UIWindowAsset newWindowAsset)
+        {
+            var sceneName = newWindowAsset.Scene.SceneName;
+            await SceneLoader.LoadSceneAdditiveAsync(sceneName);
+
+            var window = SceneManager.GetSceneByName(sceneName).GetRootGameObjects()[0]?.GetComponent<UIWindow>();
+
+            if (window == null)
+                throw new InvalidOperationException($"No UIWindow was found while trying to load window: {sceneName}");
+
+            windows.Add(newWindowAsset, window);
+
+            GlobalEvents<UIEventNewWindowLoaded>.Publish(new UIEventNewWindowLoaded
+            {
+                WindowAsset = newWindowAsset,
+                WindowInstance = window
+            });
+
+            return window;
         }
 
         public void HideWindow(UIWindowAsset windowAsset)
@@ -135,7 +159,7 @@ namespace SBN.UITool.Core.Managers
 
             var nextWindow = windowHistory.Pop();
 
-            ShowWindow(nextWindow.Asset);
+            ShowWindowAsync(nextWindow.Asset, nextWindow.Instance.OwnerScene).Forget();
         }
 
         public void ClearHistory()
@@ -143,43 +167,78 @@ namespace SBN.UITool.Core.Managers
             windowHistory.Clear();
         }
 
-        private void UnloadWindows()
+        private async UniTaskVoid UnloadWindowsForScene(int sceneIndex)
         {
-            var unloadWindows = windows
-            .Where(x => !x.Value.GetSettings().DontDestroyOnLoad)
-            .ToList();
+            var allWindows = windows.Select(x => (x.Key, x.Value))
+                .Where(x => !x.Key.Settings.DontDestroyOnLoad)
+                .ToList();
 
-            foreach (var window in unloadWindows)
+            var hierarchy = GetWindowHierarchy(sceneIndex, allWindows);
+
+            if (hierarchy.Count == 0)
+                return;
+
+            SceneManager.sceneUnloaded -= SceneManager_sceneUnloaded;
+
+            var unloadTasks = new List<UniTask>();
+
+            foreach (var window in hierarchy)
             {
-                windows.Remove(window.Key);
-                Destroy(window.Value.gameObject);
+                windows.Remove(window.WindowAsset);
+                unloadTasks.Add(SceneLoader.UnloadSceneAsync(window.WindowInstance.gameObject.scene.name));
             }
 
-            HideAllWindows();
+            await UniTask.WhenAll(unloadTasks);
+
+            ClearHistory();
+            CurrentWindowInstance = null;
+            CurrentWindowAsset = null;
+
+            SceneManager.sceneUnloaded += SceneManager_sceneUnloaded;
+
+            //var unloadWindows = windows
+            //.Where(x => !x.Value.GetSettings().DontDestroyOnLoad && x.Value.OwnerScene.buildIndex == ownerSceneIndex)
+            //.ToList();
+
+            //if (unloadWindows.Count == 0)
+            //    return;
+
         }
 
         private void SceneManager_sceneUnloaded(Scene scene)
         {
-            if (gameObject.scene.name != scene.name)
-                return;
-
-            UnloadWindows();
+            UnloadWindowsForScene(scene.buildIndex).Forget();
         }
 
-        private UIWindow CreateUIWindowInstance(UIWindowAsset newWindowObject)
+        private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode loadMode)
         {
-            var newWindowInstance = Instantiate(newWindowObject.Prefab, transform);
-            newWindowInstance.Setup(this);
 
-            windows.Add(newWindowObject, newWindowInstance);
+        }
 
-            GlobalEvents<UIEventNewWindowCreated>.Publish(new UIEventNewWindowCreated 
-            { 
-                WindowAsset = newWindowObject, 
-                WindowInstance = newWindowInstance 
-            });
+        private List<(UIWindowAsset WindowAsset, UIWindow WindowInstance)> GetWindowHierarchy(int rootSceneIndex, List<(UIWindowAsset WindowAsset, UIWindow WindowInstance)> windows)
+        {
+            var result = new List<(UIWindowAsset WindowAsset, UIWindow WindowInstance)>();
+            var stack = new Stack<(UIWindowAsset WindowAsset, UIWindow WindowInstance)>();
 
-            return newWindowInstance;
+            foreach (var scene in windows)
+            {
+                if (scene.WindowInstance.OwnerScene.buildIndex == rootSceneIndex)
+                    stack.Push((scene.WindowAsset, scene.WindowInstance));
+            }
+
+            while (stack.Count > 0)
+            {
+                var currentWindow = stack.Pop();
+                result.Add(currentWindow);
+
+                foreach (var window in windows)
+                {
+                    if (window.WindowInstance.OwnerScene.buildIndex == currentWindow.WindowInstance.gameObject.scene.buildIndex)
+                        stack.Push(window);
+                }
+            }
+
+            return result;
         }
     }
 }

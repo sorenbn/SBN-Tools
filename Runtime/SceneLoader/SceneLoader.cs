@@ -116,7 +116,7 @@ namespace SBN.SceneLoading
         /// <summary>
         /// Unloads a scene asynchronously
         /// </summary>
-        public static UniTask UnloadScene(string sceneName)
+        public static UniTask UnloadSceneAsync(string sceneName)
         {
             return UnloadScene(GetSceneBuildIndexBySceneName(sceneName));
         }
