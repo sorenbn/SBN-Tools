@@ -62,13 +62,11 @@ namespace SBN.UITool.Core.Managers
 
         private void OnEnable()
         {
-            SceneManager.sceneLoaded += SceneManager_sceneLoaded;
             SceneManager.sceneUnloaded += SceneManager_sceneUnloaded;
         }
 
         private void OnDisable()
         {
-            SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
             SceneManager.sceneUnloaded -= SceneManager_sceneUnloaded;
         }
 
@@ -167,7 +165,7 @@ namespace SBN.UITool.Core.Managers
             windowHistory.Clear();
         }
 
-        private async UniTaskVoid UnloadWindowsForScene(int sceneIndex)
+        private async UniTask UnloadWindowsForScene(int sceneIndex)
         {
             var allWindows = windows.Select(x => (x.Key, x.Value))
                 .Where(x => !x.Key.Settings.DontDestroyOnLoad)
@@ -195,24 +193,6 @@ namespace SBN.UITool.Core.Managers
             CurrentWindowAsset = null;
 
             SceneManager.sceneUnloaded += SceneManager_sceneUnloaded;
-
-            //var unloadWindows = windows
-            //.Where(x => !x.Value.GetSettings().DontDestroyOnLoad && x.Value.OwnerScene.buildIndex == ownerSceneIndex)
-            //.ToList();
-
-            //if (unloadWindows.Count == 0)
-            //    return;
-
-        }
-
-        private void SceneManager_sceneUnloaded(Scene scene)
-        {
-            UnloadWindowsForScene(scene.buildIndex).Forget();
-        }
-
-        private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode loadMode)
-        {
-
         }
 
         private List<(UIWindowAsset WindowAsset, UIWindow WindowInstance)> GetWindowHierarchy(int rootSceneIndex, List<(UIWindowAsset WindowAsset, UIWindow WindowInstance)> windows)
@@ -239,6 +219,11 @@ namespace SBN.UITool.Core.Managers
             }
 
             return result;
+        }
+
+        private async void SceneManager_sceneUnloaded(Scene scene)
+        {
+            await UnloadWindowsForScene(scene.buildIndex);
         }
     }
 }

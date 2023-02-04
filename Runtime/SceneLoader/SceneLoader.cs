@@ -1,4 +1,6 @@
 using Cysharp.Threading.Tasks;
+using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace SBN.SceneLoading
@@ -31,6 +33,9 @@ namespace SBN.SceneLoading
         /// </summary>
         public static async UniTask ChangeActiveSceneAsync(int buildIndex)
         {
+            Debug.Log($"Loading new scene additively..");
+            Debug.Log($"From: {SceneManager.GetActiveScene().name} to: {GetSceneNameByIndex(buildIndex)}");
+
             var sceneCount = SceneManager.sceneCount;
 
             if (sceneCount == 1)
@@ -42,11 +47,12 @@ namespace SBN.SceneLoading
             var previousScene = SceneManager.GetActiveScene();
 
             await SceneManager.LoadSceneAsync(buildIndex, LoadSceneMode.Additive);
-            var newScene = SceneManager.GetSceneByBuildIndex(buildIndex);
-
-            SceneManager.SetActiveScene(newScene);
-
             await SceneManager.UnloadSceneAsync(previousScene.buildIndex);
+
+            var nextScene = SceneManager.GetSceneByBuildIndex(buildIndex);
+            SceneManager.SetActiveScene(nextScene);
+
+            Debug.Log($"new scene loaded and set as active scene: {SceneManager.GetSceneByBuildIndex(buildIndex).name}");
         }
 
         /// <summary>
