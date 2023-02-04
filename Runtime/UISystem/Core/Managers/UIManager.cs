@@ -18,6 +18,8 @@ namespace SBN.UITool.Core.Managers
     [RequireComponent(typeof(CanvasScaler))]
     public class UIManager : MonoBehaviour
     {
+        private static UIManager instance;
+
         [Header("Settings")]
         [SerializeField] private UIWindowAsset initialWindow;
         [SerializeField] private List<UIWindowAsset> preloadWindows;
@@ -43,6 +45,13 @@ namespace SBN.UITool.Core.Managers
 
         private void Awake()
         {
+            if (instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            instance = this;
             ModalManager = GetComponent<UIModalManager>();
 
             SetupPreloadedWindows();
@@ -84,6 +93,7 @@ namespace SBN.UITool.Core.Managers
             if (newWindowAsset == null)
                 return;
 
+
             if (CurrentWindowAsset != null)
             {
                 if (CurrentWindowAsset == newWindowAsset)
@@ -94,7 +104,10 @@ namespace SBN.UITool.Core.Managers
             }
 
             if (!windows.TryGetValue(newWindowAsset, out var newWindowInstance))
-                newWindowInstance = CreateUIWindowInstance(newWindowAsset);
+            {
+                var ownerScene = SceneManager.GetActiveScene();
+                newWindowInstance = CreateUIWindowInstance(newWindowAsset, ownerScene);
+            }
 
             CurrentWindowAsset = newWindowAsset;
             CurrentWindowInstance = newWindowInstance;
@@ -143,10 +156,26 @@ namespace SBN.UITool.Core.Managers
             windowHistory.Clear();
         }
 
-        private void UnloadWindows()
+        private UIWindow CreateUIWindowInstance(UIWindowAsset newWindowObject, Scene ownerScene)
+        {
+            var newWindowInstance = Instantiate(newWindowObject.Prefab, transform);
+            newWindowInstance.Setup(this, ownerScene);
+
+            windows.Add(newWindowObject, newWindowInstance);
+
+            GlobalEvents<UIEventNewWindowCreated>.Publish(new UIEventNewWindowCreated
+            {
+                WindowAsset = newWindowObject,
+                WindowInstance = newWindowInstance
+            });
+
+            return newWindowInstance;
+        }
+
+        private void UnloadWindows(Scene scene)
         {
             var unloadWindows = windows
-            .Where(x => !x.Value.GetSettings().DontDestroyOnLoad)
+            .Where(x => !x.Key.Settings.DontDestroyOnLoad && x.Value.OwnerScene.buildIndex == scene.buildIndex)
             .ToList();
 
             foreach (var window in unloadWindows)
@@ -160,26 +189,7 @@ namespace SBN.UITool.Core.Managers
 
         private void SceneManager_sceneUnloaded(Scene scene)
         {
-            if (gameObject.scene.name != scene.name)
-                return;
-
-            UnloadWindows();
-        }
-
-        private UIWindow CreateUIWindowInstance(UIWindowAsset newWindowObject)
-        {
-            var newWindowInstance = Instantiate(newWindowObject.Prefab, transform);
-            newWindowInstance.Setup(this);
-
-            windows.Add(newWindowObject, newWindowInstance);
-
-            GlobalEvents<UIEventNewWindowCreated>.Publish(new UIEventNewWindowCreated 
-            { 
-                WindowAsset = newWindowObject, 
-                WindowInstance = newWindowInstance 
-            });
-
-            return newWindowInstance;
+            UnloadWindows(scene);
         }
     }
 }

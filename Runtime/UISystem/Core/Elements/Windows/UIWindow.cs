@@ -1,5 +1,7 @@
 using SBN.UITool.Core.Managers;
+using SBN.Utilities.Attributes;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace SBN.UITool.Core.Elements.Windows
@@ -11,11 +13,20 @@ namespace SBN.UITool.Core.Elements.Windows
     [RequireComponent(typeof(Canvas))]
     public class UIWindow : UIElement
     {
+        [Header("Info")]
+        [SerializeField, ReadOnly] private string ownerSceneName;
+
+        [Header("Components")]
         [Tooltip("A default back button which will trigger to go back in window history. Can be null if no back button exists for this window.")]
         [SerializeField] private Button defaultBackButton;
-        [SerializeField] private Settings settings;
 
         private UIElement[] uiElements;
+
+        public Scene OwnerScene
+        {
+            get;
+            private set;
+        }
 
         protected virtual void OnEnable()
         {
@@ -29,10 +40,17 @@ namespace SBN.UITool.Core.Elements.Windows
                 defaultBackButton.onClick.RemoveListener(OnBackButtonClick);
         }
 
-        public override void Setup(UIManager uiManager)
+        // TODO: REMOVE AFTER DEBUGGING
+        private void Update()
+        {
+            ownerSceneName = OwnerScene.name;
+        }
+
+        public void Setup(UIManager uiManager, Scene ownerScene)
         {
             base.Setup(uiManager);
 
+            OwnerScene = ownerScene;
             uiElements = GetComponentsInChildren<UIElement>();
 
             // Start at index 1 because 0 is this UIWindow object
@@ -44,18 +62,6 @@ namespace SBN.UITool.Core.Elements.Windows
         protected virtual void OnBackButtonClick()
         {
             UIManager.GoBack();
-        }
-
-        public virtual Settings GetSettings()
-        {
-            return settings;
-        }
-
-        [System.Serializable]
-        public struct Settings
-        {
-            [Tooltip("Should this window persist between different scenes in order to be availble any time during game lifecycle?")]
-            public bool DontDestroyOnLoad;
         }
     }
 }
