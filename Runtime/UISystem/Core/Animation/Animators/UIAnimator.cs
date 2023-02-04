@@ -60,5 +60,10 @@ namespace SBN.UITool.Core.Animation.Animators
             animator.enabled = false;
             animator.enabled = true;
         }
+
+        private void OnDisable()
+        {
+            ResetAnimation();
+        }
     }
 }
