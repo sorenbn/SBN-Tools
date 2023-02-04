@@ -1,7 +1,5 @@
 using SBN.UITool.Core.Managers;
-using SBN.Utilities.Attributes;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace SBN.UITool.Core.Elements.Windows
@@ -15,15 +13,9 @@ namespace SBN.UITool.Core.Elements.Windows
     {
         [Tooltip("A default back button which will trigger to go back in window history. Can be null if no back button exists for this window.")]
         [SerializeField] private Button defaultBackButton;
-        [SerializeField, ReadOnly] private string ownerSceneName;
+        [SerializeField] private Settings settings;
 
         private UIElement[] uiElements;
-
-        public Scene OwnerScene
-        {
-            get;
-            private set;
-        }
 
         protected virtual void OnEnable()
         {
@@ -37,12 +29,9 @@ namespace SBN.UITool.Core.Elements.Windows
                 defaultBackButton.onClick.RemoveListener(OnBackButtonClick);
         }
 
-        public void Setup(UIManager uiManager, Scene ownerScene)
+        public override void Setup(UIManager uiManager)
         {
             base.Setup(uiManager);
-
-            OwnerScene = ownerScene;
-            ownerSceneName = OwnerScene.name;
 
             uiElements = GetComponentsInChildren<UIElement>();
 
@@ -52,15 +41,21 @@ namespace SBN.UITool.Core.Elements.Windows
                 uiElements[i].Setup(uiManager);
         }
 
-        public void SetFocus(bool value)
-        {
-            SetInteractableState(value);
-            SetRaycastBlocking(value);
-        }
-
         protected virtual void OnBackButtonClick()
         {
             UIManager.GoBack();
+        }
+
+        public virtual Settings GetSettings()
+        {
+            return settings;
+        }
+
+        [System.Serializable]
+        public struct Settings
+        {
+            [Tooltip("Should this window persist between different scenes in order to be availble any time during game lifecycle?")]
+            public bool DontDestroyOnLoad;
         }
     }
 }

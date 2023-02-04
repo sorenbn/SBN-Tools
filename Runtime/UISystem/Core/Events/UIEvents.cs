@@ -1,6 +1,6 @@
 using SBN.UITool.Core.Elements.Windows;
 
-public struct UIEventNewWindowLoaded
+public struct UIEventNewWindowCreated
 {
     public UIWindowAsset WindowAsset
     {

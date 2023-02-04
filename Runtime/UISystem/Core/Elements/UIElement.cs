@@ -102,14 +102,6 @@ namespace SBN.UITool.Core.Elements
             CanvasGroup.interactable = value;
         }
 
-        public virtual void SetRaycastBlocking(bool value)
-        {
-            if (CanvasGroup == null)
-                CanvasGroup = GetComponent<CanvasGroup>();
-
-            CanvasGroup.blocksRaycasts = value;
-        }
-
         private void SetActiveState(bool value)
         {
             Active = value;

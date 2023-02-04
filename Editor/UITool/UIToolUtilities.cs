@@ -37,6 +37,8 @@ namespace SBN.EditorTools.UITool
             eventSystemObj.AddComponent<EventSystem>();
             eventSystemObj.AddComponent<StandaloneInputModule>();
 
+            var modalManager = go.AddComponent<UIModalManager>();
+            SBNEditorUtilities.MoveComponentToTop(go, modalManager);
             SBNEditorUtilities.MoveComponentToTop(go, uiManager);
         }
 

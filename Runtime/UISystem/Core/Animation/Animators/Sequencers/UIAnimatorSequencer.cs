@@ -46,10 +46,5 @@ namespace SBN.UITool.Core.Animation.Animators.Sequencers
         {
             sequencer.ResetSequence();
         }
-
-        private void OnDisable()
-        {
-            ResetAnimation();
-        }
     }
 }
