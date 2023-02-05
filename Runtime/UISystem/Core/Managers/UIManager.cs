@@ -120,6 +120,12 @@ namespace SBN.UITool.Core.Managers
                 return;
 
             windowInstance.Hide();
+
+            if (CurrentWindowInstance == windowInstance)
+            {
+                CurrentWindowInstance = null;
+                CurrentWindowAsset = null;
+            }
         }
 
         public void HideAllWindows()
@@ -176,6 +182,9 @@ namespace SBN.UITool.Core.Managers
             var unloadWindows = windows
             .Where(x => !x.Key.Settings.DontDestroyOnLoad && x.Value.OwnerScene.buildIndex == scene.buildIndex)
             .ToList();
+
+            if (unloadWindows.Count == 0)
+                return;
 
             foreach (var window in unloadWindows)
             {
