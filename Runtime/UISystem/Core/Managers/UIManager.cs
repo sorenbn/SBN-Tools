@@ -93,7 +93,6 @@ namespace SBN.UITool.Core.Managers
             if (newWindowAsset == null)
                 return;
 
-
             if (CurrentWindowAsset != null)
             {
                 if (CurrentWindowAsset == newWindowAsset)
@@ -184,7 +183,10 @@ namespace SBN.UITool.Core.Managers
                 Destroy(window.Value.gameObject);
             }
 
-            HideAllWindows();
+            CurrentWindowInstance = null;
+            CurrentWindowAsset = null;
+
+            ClearHistory();
         }
 
         private void SceneManager_sceneUnloaded(Scene scene)
