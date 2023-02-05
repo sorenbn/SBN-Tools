@@ -33,7 +33,12 @@ namespace SBN.SceneHelper.Core
         private List<ISceneObserverAsync> sceneObserversAsync;
         private Coroutine initializeRoutine;
 
-        private bool initializing;
+        public bool SceneReady
+        {
+            get; private set;
+        }
+        public bool Initializing { get;
+            private set; }
 
         private void Awake()
         {
@@ -45,7 +50,7 @@ namespace SBN.SceneHelper.Core
 
         private void Start()
         {
-            if (initializing)
+            if (Initializing)
             {
                 StartCoroutine(c_WaitForSceneReady());
                 return;
@@ -92,17 +97,19 @@ namespace SBN.SceneHelper.Core
 
         private void ReadyScene()
         {
+            SceneReady = false;
             var activeScene = gameObject.scene;
 
             for (int i = 0; i < sceneObservers.Count; i++)
                 sceneObservers[i].OnSceneReady(activeScene);
 
+            SceneReady = true;
             OnSceneReady?.Invoke(activeScene);
         }
 
         private IEnumerator c_InitializeScene(Scene scene)
         {
-            initializing = true;
+            Initializing = true;
 
             OnSceneIntialize?.Invoke(scene);
 
@@ -112,12 +119,12 @@ namespace SBN.SceneHelper.Core
             for (int i = 0; i < sceneObserversAsync.Count; i++)
                 yield return sceneObserversAsync[i].OnSceneInitializeAsync(scene);
 
-            initializing = false;
+            Initializing = false;
         }
 
         private IEnumerator c_WaitForSceneReady()
         {
-            while (initializing)
+            while (Initializing)
                 yield return null;
 
             ReadyScene();
