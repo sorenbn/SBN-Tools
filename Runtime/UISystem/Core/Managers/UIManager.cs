@@ -27,11 +27,6 @@ namespace SBN.UITool.Core.Managers
         private Stack<(UIWindowAsset Asset, UIWindow Instance)> windowHistory = new Stack<(UIWindowAsset, UIWindow)>();
         private Dictionary<UIWindowAsset, UIWindow> windows = new Dictionary<UIWindowAsset, UIWindow>();
 
-        public UIModalManager ModalManager
-        {
-            get;
-            private set;
-        }
         public UIWindow CurrentWindowInstance
         {
             get;
@@ -52,7 +47,6 @@ namespace SBN.UITool.Core.Managers
             }
 
             instance = this;
-            ModalManager = GetComponent<UIModalManager>();
 
             SetupPreloadedWindows();
             DontDestroyOnLoad(gameObject);
