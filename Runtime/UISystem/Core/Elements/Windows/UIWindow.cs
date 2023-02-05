@@ -1,5 +1,4 @@
 using SBN.UITool.Core.Managers;
-using SBN.Utilities.Attributes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,9 +12,6 @@ namespace SBN.UITool.Core.Elements.Windows
     [RequireComponent(typeof(Canvas))]
     public class UIWindow : UIElement
     {
-        [Header("Info")]
-        [SerializeField, ReadOnly] private string ownerSceneName;
-
         [Header("Components")]
         [Tooltip("A default back button which will trigger to go back in window history. Can be null if no back button exists for this window.")]
         [SerializeField] private Button defaultBackButton;
@@ -38,12 +34,6 @@ namespace SBN.UITool.Core.Elements.Windows
         {
             if (defaultBackButton != null)
                 defaultBackButton.onClick.RemoveListener(OnBackButtonClick);
-        }
-
-        // TODO: REMOVE AFTER DEBUGGING
-        private void Update()
-        {
-            ownerSceneName = OwnerScene.name;
         }
 
         public void Setup(UIManager uiManager, Scene ownerScene)
