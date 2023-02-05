@@ -21,6 +21,11 @@ namespace SBN.UITool.Core.Animation.Animators.Sequencers
 
         public bool IsAnimating => sequencer.IsRunning();
 
+        private void OnDisable()
+        {
+            ResetAnimation();
+        }
+
         public void BeginAnimation()
         {
             if (actions == null || actions.Length == 0)
