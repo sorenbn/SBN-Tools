@@ -11,3 +11,19 @@ public struct UIEventNewWindowCreated
         get; set;
     }
 }
+
+public struct UIEventWindowShow
+{
+    public UIWindowAsset WindowAsset
+    {
+        get; set;
+    }
+}
+
+public struct UIEventWindowHide
+{
+    public UIWindowAsset WindowAsset
+    {
+        get; set;
+    }
+}

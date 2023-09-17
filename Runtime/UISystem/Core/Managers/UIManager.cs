@@ -1,5 +1,6 @@
 using SBN.Events;
 using SBN.UITool.Core.Elements.Windows;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -42,7 +43,9 @@ namespace SBN.UITool.Core.Managers
         {
             if (instance != null)
             {
+                Debug.LogError($"ERROR! There should only ever be one instance of a UIManager. Destroying self..");
                 Destroy(gameObject);
+
                 return;
             }
 
@@ -94,6 +97,8 @@ namespace SBN.UITool.Core.Managers
 
                 CurrentWindowInstance.Hide();
                 windowHistory.Push((CurrentWindowAsset, CurrentWindowInstance));
+
+                GlobalEvents<UIEventWindowHide>.Publish(new UIEventWindowHide { WindowAsset = CurrentWindowAsset });
             }
 
             if (!windows.TryGetValue(newWindowAsset, out var newWindowInstance))
@@ -106,6 +111,7 @@ namespace SBN.UITool.Core.Managers
             CurrentWindowInstance = newWindowInstance;
 
             CurrentWindowInstance.Show();
+            GlobalEvents<UIEventWindowShow>.Publish(new UIEventWindowShow { WindowAsset = CurrentWindowAsset });
         }
 
         public void HideWindow(UIWindowAsset windowAsset)
@@ -124,7 +130,11 @@ namespace SBN.UITool.Core.Managers
 
         public void HideAllWindows()
         {
-            CurrentWindowInstance?.HideInstant();
+            if (CurrentWindowInstance != null)
+            {
+                CurrentWindowInstance.HideInstant();
+                GlobalEvents<UIEventWindowHide>.Publish(new UIEventWindowHide { WindowAsset = CurrentWindowAsset });
+            }
 
             CurrentWindowInstance = null;
             CurrentWindowAsset = null;
@@ -140,6 +150,7 @@ namespace SBN.UITool.Core.Managers
             if (CurrentWindowAsset != null)
             {
                 CurrentWindowInstance.Hide();
+                GlobalEvents<UIEventWindowHide>.Publish(new UIEventWindowHide { WindowAsset = CurrentWindowAsset });
 
                 CurrentWindowInstance = null;
                 CurrentWindowAsset = null;
