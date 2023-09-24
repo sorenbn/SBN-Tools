@@ -57,15 +57,14 @@ namespace SBN.UITool.Core.Managers
 
         private void SetupPreloadedWindows()
         {
+            var ownerScene = SceneManager.GetActiveScene();
+
             for (int i = 0; i < preloadWindows.Count; i++)
             {
                 var windowObject = preloadWindows[i];
-                var window = Instantiate(windowObject.Prefab, transform);
+                var window = CreateUIWindowInstance(windowObject, ownerScene);
 
-                window.Setup(this);
                 window.HideInstant();
-
-                windows.Add(windowObject, window);
             }
         }
 
