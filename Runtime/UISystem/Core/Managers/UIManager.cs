@@ -50,26 +50,13 @@ namespace SBN.UITool.Core.Managers
             }
 
             instance = this;
-
-            SetupPreloadedWindows();
             DontDestroyOnLoad(gameObject);
-        }
-
-        private void SetupPreloadedWindows()
-        {
-            var ownerScene = SceneManager.GetActiveScene();
-
-            for (int i = 0; i < preloadWindows.Count; i++)
-            {
-                var windowObject = preloadWindows[i];
-                var window = CreateUIWindowInstance(windowObject, ownerScene);
-
-                window.HideInstant();
-            }
         }
 
         private void Start()
         {
+            SetupPreloadedWindows();
+
             if (initialWindow != null)
                 ShowWindow(initialWindow);
         }
@@ -163,6 +150,19 @@ namespace SBN.UITool.Core.Managers
         public void ClearHistory()
         {
             windowHistory.Clear();
+        }
+
+        private void SetupPreloadedWindows()
+        {
+            var ownerScene = SceneManager.GetActiveScene();
+
+            for (int i = 0; i < preloadWindows.Count; i++)
+            {
+                var windowObject = preloadWindows[i];
+                var window = CreateUIWindowInstance(windowObject, ownerScene);
+
+                window.HideInstant();
+            }
         }
 
         private UIWindow CreateUIWindowInstance(UIWindowAsset newWindowObject, Scene ownerScene)
