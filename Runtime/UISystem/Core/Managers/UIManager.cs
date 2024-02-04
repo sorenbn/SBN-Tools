@@ -190,14 +190,17 @@ namespace SBN.UITool.Core.Managers
             if (unloadWindows.Count == 0)
                 return;
 
+            if (unloadWindows.Any(x => x.Key == CurrentWindowAsset))
+            {
+                CurrentWindowInstance = null;
+                CurrentWindowAsset = null;
+            }
+
             foreach (var window in unloadWindows)
             {
                 windows.Remove(window.Key);
                 Destroy(window.Value.gameObject);
             }
-
-            CurrentWindowInstance = null;
-            CurrentWindowAsset = null;
 
             ClearHistory();
         }
